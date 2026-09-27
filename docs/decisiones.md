@@ -22,3 +22,16 @@ Se completa fase a fase.
 | `app.ts` separado de `index.ts` | Todo en un archivo | Permite testear la app con Supertest sin abrir un puerto |
 | Variables de entorno validadas con Zod | Leer `process.env` a mano | Fallo temprano y claro si falta una variable |
 | Vitest + Supertest | Jest | Más rápido y cero configuración con TypeScript |
+
+## Fase 2 — Catálogo
+
+| Decisión | Alternativa | Razón |
+| --- | --- | --- |
+| Prefijo `/api` en todas las rutas | Rutas sin prefijo | API consistente; permite proxy de Vite sin CORS |
+| Migraciones en `.js` | Migraciones en `.ts` | `node-pg-migrate` carga JS CommonJS sin fricción |
+| SQL crudo con `pgm.sql()` | API fluida `pgm.createTable()` | Transparencia: se ve el SQL y los constraints |
+| Capa `repositories/` (funciones planas) | SQL en las rutas | Separa SQL de HTTP, reutilizable y testeable |
+| BD de tests `pizzeria_test` + tests secuenciales | BD de dev / mocks | Integración aislada; `fileParallelism: false` evita colisiones |
+| Tailwind 4 vía `@tailwindcss/vite` | CSS a mano | Stack acordado; primera UI real |
+| Moneda CLP (solo formato) | Otra moneda | Contexto chileno; se guarda `DECIMAL` sin decimales |
+| Seed como script (`npm run seed`) | Seed en migración | Separa esquema de datos de demo |

@@ -47,15 +47,45 @@ npm install
 npm run migrate
 ```
 
-### 4. Arrancar el backend
+### 4. Cargar datos de ejemplo (opcional)
+
+```bash
+npm run seed
+```
+
+### 5. Arrancar el backend
 
 ```bash
 npm run dev
 ```
 
-La API queda disponible en `http://localhost:4000`. Health check en `GET /health`.
+La API queda disponible en `http://localhost:4000`. Health check en `GET /api/health`.
+
+### 6. Arrancar el frontend (en otra terminal)
+
+```bash
+cd frontend
+npm install
+npm run dev
+```
+
+La web queda en `http://localhost:5173`. Vite reenvía las peticiones a `/api` al backend.
+
+## Endpoints
+
+- `GET /api/health` — estado de la app y de la base de datos
+- `GET /api/categories` — catálogo de categorías
+- `GET /api/products` — productos activos (opcional `?category=<id>`)
 
 ## Tests
+
+Los tests corren contra una base de datos aislada (`pizzeria_test`). Créala una sola vez:
+
+```bash
+docker compose exec db createdb -U pizza pizzeria_test
+```
+
+Luego:
 
 ```bash
 cd backend
