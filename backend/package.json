@@ -7,8 +7,10 @@
     "dev": "tsx watch src/index.ts",
     "start": "tsx src/index.ts",
     "typecheck": "tsc --noEmit",
-    "test": "vitest run",
-    "test:watch": "vitest",
+    "seed": "dotenv -e .env -- tsx src/db/seed.ts",
+    "test": "npm run test:migrate && dotenv -e .env.test -- vitest run",
+    "test:watch": "dotenv -e .env.test -- vitest",
+    "test:migrate": "dotenv -e .env.test -- node-pg-migrate up --migrations-dir migrations",
     "migrate": "dotenv -e .env -- node-pg-migrate up --migrations-dir migrations",
     "migrate:down": "dotenv -e .env -- node-pg-migrate down --migrations-dir migrations"
   },
