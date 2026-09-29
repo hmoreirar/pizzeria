@@ -74,8 +74,48 @@ La web queda en `http://localhost:5173`. Vite reenvía las peticiones a `/api` a
 ## Endpoints
 
 - `GET /api/health` — estado de la app y de la base de datos
-- `GET /api/categories` — catálogo de categorías
+- `GET /api/categories` — categorías activas, ordenadas para la navegación
 - `GET /api/products` — productos activos (opcional `?category=<id>`)
+- `GET /api/products/:id` — detalle del producto con sus grupos y opciones
+- `GET /api/settings` — configuración pública (costo de despacho)
+- `POST /api/orders/quote` — valida el carrito y devuelve el precio recalculado en el backend
+- `POST /api/orders` — crea un pedido (compra anónima) recalculando precios en el backend
+- `GET /api/orders/:id` — estado y detalle del pedido (seguimiento)
+
+## Administración
+
+Panel en `/admin` (login obligatorio). Credenciales iniciales:
+
+```text
+email:    admin@pizzeria.cl
+password: admin1234
+```
+
+Configurables con las variables `ADMIN_EMAIL` y `ADMIN_PASSWORD` (ver `.env.example`).
+El secreto de sesión `JWT_SECRET` también debe estar definido.
+
+Endpoints administrativos (requieren `Authorization: Bearer <token>`):
+
+- `POST /api/auth/login` — obtiene el token
+- `GET /api/admin/dashboard` — métricas operacionales
+- `GET /api/admin/orders`, `GET /api/admin/orders/:id`, `PATCH /api/admin/orders/:id/status`
+- `GET/POST/PATCH /api/admin/products` (+ `/option-groups` y `/options` para opciones)
+- `GET/POST/PATCH /api/admin/categories`
+
+> La autorización real vive en el backend (middleware `requireAdmin`).
+
+> El catálogo cargado por `npm run seed` es un **placeholder de demostración**
+> (nombres con "(demo)"); se reemplazará por el menú real al final del MVP.
+
+## Producción / Deploy
+
+```bash
+cd frontend && npm run build
+cd ../backend && npm run build
+cd backend && npm start   # sirve API + frontend en un solo puerto
+```
+
+Guía paso a paso para desplegar en Render: ver [`DEPLOY.md`](./DEPLOY.md).
 
 ## Tests
 

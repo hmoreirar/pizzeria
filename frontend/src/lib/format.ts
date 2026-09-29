@@ -5,3 +5,8 @@ export function formatPrice(price: number): string {
     currency: 'CLP',
   }).format(price)
 }
+
+// "Desde $8.990" para productos configurables (el precio base es el mínimo).
+export function formatFromPrice(price: number): string {
+  return `Desde ${formatPrice(price)}`
+}

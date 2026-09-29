@@ -1,1 +1,33 @@
 @import "tailwindcss";
+
+/*
+  Paleta de marca del MVP (especificación §4).
+  Jerarquía visual: verde → crema → rojo → naranja → verde secundario.
+*/
+@theme {
+  /* Verde principal (#006C32) */
+  --color-brand: #006c32;
+  --color-brand-dark: #005028;
+
+  /* Fondo / superficie cálida (#E8DDCB) */
+  --color-cream: #e8ddcb;
+
+  /* Rojo (#BD0016): CTA y acentos fuertes */
+  --color-accent: #bd0016;
+  --color-accent-dark: #990012;
+
+  /* Naranja (#D35201): acentos secundarios */
+  --color-ember: #d35201;
+
+  /* Verde secundario (#5A9500) */
+  --color-leaf: #5a9500;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-cream);
+    color: #1f2937;
+    font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto,
+      "Helvetica Neue", Arial, sans-serif;
+  }
+}

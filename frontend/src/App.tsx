@@ -1,57 +1,41 @@
-import { useEffect, useState } from 'react'
-import { getCategories, getProducts } from './api'
-import { CategoryFilter } from './components/CategoryFilter'
-import { ProductCard } from './components/ProductCard'
-import type { Category, Product } from './types'
+import { Routes, Route, Navigate } from 'react-router'
+import { MenuPage } from './pages/MenuPage'
+import { ProductPage } from './pages/ProductPage'
+import { CartPage } from './pages/CartPage'
+import { CheckoutPage } from './pages/CheckoutPage'
+import { OrderConfirmationPage } from './pages/OrderConfirmationPage'
+import { RequireAdmin } from './admin/RequireAdmin'
+import { AdminLoginPage } from './pages/admin/AdminLoginPage'
+import { AdminLayout } from './pages/admin/AdminLayout'
+import { AdminDashboardPage } from './pages/admin/AdminDashboardPage'
+import { AdminOrdersPage } from './pages/admin/AdminOrdersPage'
+import { AdminOrderDetailPage } from './pages/admin/AdminOrderDetailPage'
+import { AdminProductsPage } from './pages/admin/AdminProductsPage'
+import { AdminProductEditPage } from './pages/admin/AdminProductEditPage'
+import { AdminCategoriesPage } from './pages/admin/AdminCategoriesPage'
 
 export default function App() {
-  const [categories, setCategories] = useState<Category[]>([])
-  const [products, setProducts] = useState<Product[]>([])
-  const [selectedCategory, setSelectedCategory] = useState<number | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-
-  useEffect(() => {
-    getCategories()
-      .then(setCategories)
-      .catch(() => setError('No se pudo cargar el catálogo.'))
-  }, [])
-
-  useEffect(() => {
-    setLoading(true)
-    setError(null)
-    getProducts(selectedCategory ?? undefined)
-      .then(setProducts)
-      .catch(() => setError('No se pudieron cargar los productos.'))
-      .finally(() => setLoading(false))
-  }, [selectedCategory])
-
   return (
-    <div className="mx-auto max-w-5xl px-4 py-8">
-      <header className="mb-6">
-        <h1 className="text-3xl font-bold text-gray-900">🍕 Pizzería</h1>
-        <p className="text-gray-500">Elegí lo que quieras, lo llevamos a tu casa.</p>
-      </header>
+    <Routes>
+      <Route path="/" element={<MenuPage />} />
+      <Route path="/producto/:id" element={<ProductPage />} />
+      <Route path="/carrito" element={<CartPage />} />
+      <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/pedido/:id" element={<OrderConfirmationPage />} />
 
-      {error && <p className="text-red-600 mb-4">{error}</p>}
-
-      <CategoryFilter
-        categories={categories}
-        selected={selectedCategory}
-        onSelect={setSelectedCategory}
-      />
-
-      {loading ? (
-        <p className="text-gray-500 mt-6">Cargando…</p>
-      ) : products.length === 0 ? (
-        <p className="text-gray-500 mt-6">No hay productos disponibles.</p>
-      ) : (
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
-          ))}
-        </div>
-      )}
-    </div>
+      <Route path="/admin/login" element={<AdminLoginPage />} />
+      <Route element={<RequireAdmin />}>
+        <Route element={<AdminLayout />}>
+          <Route path="/admin" element={<Navigate to="/admin/dashboard" replace />} />
+          <Route path="/admin/dashboard" element={<AdminDashboardPage />} />
+          <Route path="/admin/orders" element={<AdminOrdersPage />} />
+          <Route path="/admin/orders/:id" element={<AdminOrderDetailPage />} />
+          <Route path="/admin/products" element={<AdminProductsPage />} />
+          <Route path="/admin/products/new" element={<AdminProductEditPage />} />
+          <Route path="/admin/products/:id" element={<AdminProductEditPage />} />
+          <Route path="/admin/categories" element={<AdminCategoriesPage />} />
+        </Route>
+      </Route>
+    </Routes>
   )
 }

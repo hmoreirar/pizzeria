@@ -6,22 +6,29 @@ interface Props {
   onSelect: (id: number | null) => void
 }
 
-const base = 'px-4 py-2 rounded-full text-sm font-medium transition-colors'
-
 export function CategoryFilter({ categories, selected, onSelect }: Props) {
-  const buttonClass = (active: boolean) =>
-    `${base} ${active ? 'bg-red-600 text-white' : 'bg-gray-100 text-gray-700 hover:bg-gray-200'}`
+  const pill = (active: boolean) =>
+    `shrink-0 rounded-full px-4 py-2 text-sm font-semibold transition-colors ${
+      active
+        ? 'bg-brand text-white'
+        : 'border border-brand/25 bg-white text-brand hover:bg-brand/5'
+    }`
 
   return (
-    <div className="flex flex-wrap gap-2">
-      <button onClick={() => onSelect(null)} className={buttonClass(selected === null)}>
+    <nav aria-label="Categorías" className="flex gap-2 overflow-x-auto pb-1">
+      <button type="button" onClick={() => onSelect(null)} className={pill(selected === null)}>
         Todas
       </button>
       {categories.map((c) => (
-        <button key={c.id} onClick={() => onSelect(c.id)} className={buttonClass(selected === c.id)}>
+        <button
+          type="button"
+          key={c.id}
+          onClick={() => onSelect(c.id)}
+          className={pill(selected === c.id)}
+        >
           {c.name}
         </button>
       ))}
-    </div>
+    </nav>
   )
 }

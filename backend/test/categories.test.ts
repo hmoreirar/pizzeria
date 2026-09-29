@@ -10,18 +10,22 @@ beforeEach(async () => {
 })
 
 describe('GET /api/categories', () => {
-  it('devuelve la lista de categorías ordenada por nombre', async () => {
-    await pool.query(
-      `INSERT INTO categories (name) VALUES ('Pizzas'), ('Bebidas'), ('Postres')`,
-    )
+  it('devuelve solo las categorías activas, ordenadas por sort_order y nombre', async () => {
+    await pool.query(`
+      INSERT INTO categories (name, active, sort_order) VALUES
+        ('Bebidas', TRUE, 3),
+        ('Pizzas', TRUE, 0),
+        ('Promociones', TRUE, 4),
+        ('Oculta', FALSE, 99)
+    `)
 
     const res = await request(app).get('/api/categories')
 
     expect(res.status).toBe(200)
     expect(res.body).toEqual([
-      { id: expect.any(Number), name: 'Bebidas' },
-      { id: expect.any(Number), name: 'Pizzas' },
-      { id: expect.any(Number), name: 'Postres' },
+      { id: expect.any(Number), name: 'Pizzas', active: true, sortOrder: 0 },
+      { id: expect.any(Number), name: 'Bebidas', active: true, sortOrder: 3 },
+      { id: expect.any(Number), name: 'Promociones', active: true, sortOrder: 4 },
     ])
   })
 
