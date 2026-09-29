@@ -88,6 +88,7 @@ export interface Order {
   delivery: DeliveryInfo
   items: OrderItem[]
   createdAt: string
+  updatedAt: string
 }
 
 // Resumen de un pedido para listados (admin).

@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router'
 import { getOrder } from '../api'
 import { Header } from '../components/Header'
@@ -18,13 +18,16 @@ const PAYMENT_LABELS: Record<string, string> = {
   transfer: 'Transferencia',
 }
 
+// Seguimiento: actualizamos el estado cada 25s para reflejar cambios del admin.
+const POLL_INTERVAL_MS = 25000
+
 export function OrderConfirmationPage() {
   const { id } = useParams()
   const [order, setOrder] = useState<Order | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
+  const load = useCallback(() => {
     const orderId = Number(id)
     if (!Number.isInteger(orderId) || orderId <= 0) {
       setError('Pedido inválido.')
@@ -36,6 +39,12 @@ export function OrderConfirmationPage() {
       .catch(() => setError('No se pudo cargar el pedido.'))
       .finally(() => setLoading(false))
   }, [id])
+
+  useEffect(() => {
+    load()
+    const timer = setInterval(load, POLL_INTERVAL_MS)
+    return () => clearInterval(timer)
+  }, [load])
 
   if (loading) {
     return <p className="p-6 text-gray-500">Cargando…</p>
@@ -53,6 +62,7 @@ export function OrderConfirmationPage() {
   }
 
   const currentStep = STEPS.findIndex((s) => s.key === order.status)
+  const paid = order.paymentStatus === 'paid'
 
   return (
     <div className="min-h-screen">
@@ -60,10 +70,22 @@ export function OrderConfirmationPage() {
 
       <main className="mx-auto max-w-2xl px-4 py-6">
         <div className="text-center">
-          <div className="text-5xl">✅</div>
+          <div className="text-5xl">✓</div>
           <h1 className="mt-3 text-2xl font-extrabold text-gray-900">¡Pedido recibido!</h1>
-          <p className="mt-1 text-gray-500">
-            Pedido <span className="font-semibold text-brand">#{order.id}</span>
+          <div className="mt-1 flex items-center justify-center gap-3 text-gray-500">
+            <span>
+              Pedido <span className="font-semibold text-brand">#{order.id}</span>
+            </span>
+            <button
+              type="button"
+              onClick={load}
+              className="rounded-lg border border-gray-300 px-2.5 py-1 text-xs font-semibold text-gray-600 hover:bg-gray-50"
+            >
+              Actualizar
+            </button>
+          </div>
+          <p className="mt-1 text-xs text-gray-400">
+            Última actualización: {new Date(order.updatedAt).toLocaleString('es-CL')}
           </p>
         </div>
 
@@ -140,7 +162,16 @@ export function OrderConfirmationPage() {
           {order.delivery.instructions && (
             <p className="mt-1 text-gray-500">“{order.delivery.instructions}”</p>
           )}
-          <p className="mt-2 text-gray-500">Pago: {PAYMENT_LABELS[order.paymentMethod]}</p>
+          <div className="mt-2 flex items-center gap-2">
+            <span className="text-gray-500">Pago: {PAYMENT_LABELS[order.paymentMethod]}</span>
+            <span
+              className={`rounded-full px-2.5 py-0.5 text-xs font-semibold ${
+                paid ? 'bg-leaf/15 text-leaf' : 'bg-ember/10 text-ember'
+              }`}
+            >
+              {paid ? 'Pago confirmado' : 'Pago pendiente'}
+            </span>
+          </div>
         </section>
 
         <Link

@@ -85,6 +85,7 @@ export interface Order {
   delivery: DeliveryInfo
   items: OrderItem[]
   createdAt: string
+  updatedAt: string
 }
 
 export interface CreateOrderPayload {

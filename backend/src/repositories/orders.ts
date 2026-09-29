@@ -31,6 +31,7 @@ interface OrderRow {
   delivery_commune: string | null
   delivery_instructions: string | null
   created_at: Date
+  updated_at: Date
 }
 
 interface OrderItemRow {
@@ -53,12 +54,12 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
   try {
     await client.query('BEGIN')
 
-    const orderResult = await client.query<{ id: number; created_at: Date }>(
+    const orderResult = await client.query<{ id: number; created_at: Date; updated_at: Date }>(
       `INSERT INTO orders
          (subtotal, delivery_fee, total, payment_method,
           delivery_name, delivery_phone, delivery_address, delivery_commune, delivery_instructions)
        VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)
-       RETURNING id, created_at`,
+       RETURNING id, created_at, updated_at`,
       [
         subtotal,
         deliveryFee,
@@ -101,6 +102,7 @@ export async function createOrder(input: CreateOrderInput): Promise<Order> {
       delivery: input.delivery,
       items,
       createdAt: order.created_at.toISOString(),
+      updatedAt: order.updated_at.toISOString(),
     }
   } catch (err) {
     await client.query('ROLLBACK')
@@ -114,7 +116,7 @@ export async function getOrderById(id: number): Promise<Order | null> {
   const orderResult = await pool.query<OrderRow>(
     `SELECT id, status, subtotal, delivery_fee, total, payment_method, payment_status,
             delivery_name, delivery_phone, delivery_address, delivery_commune, delivery_instructions,
-            created_at
+            created_at, updated_at
        FROM orders
       WHERE id = $1`,
     [id],
@@ -156,6 +158,7 @@ export async function getOrderById(id: number): Promise<Order | null> {
     },
     items,
     createdAt: row.created_at.toISOString(),
+    updatedAt: row.updated_at.toISOString(),
   }
 }
 
