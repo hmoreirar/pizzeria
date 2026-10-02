@@ -3,6 +3,7 @@ import path from 'path'
 import express from 'express'
 import { app } from './app'
 import { env } from './config/env'
+import { ensureSeedData } from './db/bootstrap'
 
 // Sirve el frontend compilado (Vite → frontend/dist) en producción.
 // En desarrollo el frontend corre con `vite` (que proxea /api a este backend),
@@ -22,6 +23,16 @@ if (fs.existsSync(indexHtml)) {
   })
 }
 
-app.listen(env.PORT, () => {
-  console.log(`🍕 Pizzeria API escuchando en http://localhost:${env.PORT}`)
+async function main() {
+  // Siembra catálogo + admin si la base está vacía (idempotente).
+  await ensureSeedData()
+
+  app.listen(env.PORT, () => {
+    console.log(`Pizzeria API escuchando en http://localhost:${env.PORT}`)
+  })
+}
+
+main().catch((err) => {
+  console.error('Error al iniciar:', err)
+  process.exit(1)
 })
