@@ -9,6 +9,7 @@
     "start": "node dist/index.js",
     "typecheck": "tsc --noEmit",
     "seed": "dotenv -e .env -- tsx src/db/seed.ts",
+    "seed:prod": "node dist/db/seed.js",
     "test": "npm run test:migrate && dotenv -e .env.test -- vitest run",
     "test:watch": "dotenv -e .env.test -- vitest",
     "test:migrate": "dotenv -e .env.test -- node-pg-migrate up --migrations-dir migrations",
