@@ -17,7 +17,7 @@ export function AdminLoginPage() {
       await login(email, password)
       navigate('/admin/dashboard')
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo iniciar sesión')
+      setError(err instanceof Error ? err.message : 'Could not sign in.')
       setSubmitting(false)
     }
   }
@@ -25,7 +25,7 @@ export function AdminLoginPage() {
   return (
     <div className="flex min-h-screen items-center justify-center px-4">
       <form onSubmit={handleSubmit} className="w-full max-w-sm rounded-2xl bg-white p-6 shadow-sm">
-        <h1 className="mb-6 text-center text-2xl font-extrabold text-gray-900">🍕 Admin</h1>
+        <h1 className="mb-6 text-center text-2xl font-extrabold text-gray-900">Pizza House Admin</h1>
         <div className="space-y-4">
           <div>
             <label className="text-sm font-medium text-gray-700" htmlFor="email">
@@ -43,7 +43,7 @@ export function AdminLoginPage() {
           </div>
           <div>
             <label className="text-sm font-medium text-gray-700" htmlFor="password">
-              Contraseña
+              Password
             </label>
             <input
               id="password"
@@ -62,7 +62,7 @@ export function AdminLoginPage() {
           disabled={submitting}
           className="mt-6 w-full rounded-xl bg-brand py-3 font-semibold text-white disabled:opacity-60"
         >
-          {submitting ? 'Ingresando…' : 'Ingresar'}
+          {submitting ? 'Signing in…' : 'Sign in'}
         </button>
       </form>
     </div>

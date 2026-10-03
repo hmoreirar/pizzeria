@@ -12,16 +12,16 @@ export function AdminDashboardPage() {
   useEffect(() => {
     getDashboard()
       .then(setStats)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
   }, [])
 
   if (error) return <p className="text-accent">{error}</p>
-  if (!stats) return <p className="text-gray-500">Cargando…</p>
+  if (!stats) return <p className="text-gray-500">Loading…</p>
 
   const cards = [
-    { label: 'Pedidos pendientes', value: String(stats.pendingOrders) },
-    { label: 'Pedidos del día', value: String(stats.ordersToday) },
-    { label: 'Ventas del día', value: formatPrice(stats.salesToday) },
+    { label: 'Pending orders', value: String(stats.pendingOrders) },
+    { label: 'Orders today', value: String(stats.ordersToday) },
+    { label: 'Sales today', value: formatPrice(stats.salesToday) },
   ]
 
   return (
@@ -37,9 +37,9 @@ export function AdminDashboardPage() {
         ))}
       </div>
 
-      <h2 className="mb-3 mt-8 text-lg font-bold text-gray-900">Pedidos recientes</h2>
+      <h2 className="mb-3 mt-8 text-lg font-bold text-gray-900">Recent orders</h2>
       {stats.recentOrders.length === 0 ? (
-        <p className="text-gray-500">Aún no hay pedidos.</p>
+        <p className="text-gray-500">No orders yet.</p>
       ) : (
         <ul className="space-y-2">
           {stats.recentOrders.map((order) => (

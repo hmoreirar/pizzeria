@@ -42,7 +42,7 @@ export function AdminProductEditPage() {
     if (productId) {
       getOptionGroups(productId)
         .then(setGroups)
-        .catch(() => setError('No se pudieron cargar las opciones.'))
+        .catch(() => setError('Could not load options.'))
     }
   }, [productId])
 
@@ -54,7 +54,7 @@ export function AdminProductEditPage() {
           setCategoryId((prev) => (prev === 0 && cats.length > 0 ? cats[0].id : prev))
         }
       })
-      .catch(() => setError('No se pudieron cargar las categorías.'))
+      .catch(() => setError('Could not load categories.'))
 
     if (!isNew && productId) {
       getAdminProduct(productId)
@@ -66,7 +66,7 @@ export function AdminProductEditPage() {
           setPrice(String(p.price))
           setActive(p.active)
         })
-        .catch(() => setError('No se pudo cargar el producto.'))
+        .catch(() => setError('Could not load the product.'))
         .finally(() => setLoading(false))
       loadGroups()
     } else {
@@ -96,30 +96,30 @@ export function AdminProductEditPage() {
         setError(null)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo guardar.')
+      setError(err instanceof Error ? err.message : 'Could not save.')
       setSaving(false)
     }
   }
 
-  if (loading) return <p className="text-gray-500">Cargando…</p>
+  if (loading) return <p className="text-gray-500">Loading…</p>
 
   return (
     <div>
       <Link to="/admin/products" className="mb-4 inline-block font-semibold text-brand">
-        ← Volver a productos
+        ← Back to products
       </Link>
       <h1 className="mb-6 text-2xl font-extrabold text-gray-900">
-        {isNew ? 'Nuevo producto' : `Editar: ${name || '…'}`}
+        {isNew ? 'New product' : `Edit: ${name || '…'}`}
       </h1>
 
       <form onSubmit={handleSave} className="rounded-2xl bg-white p-5 shadow-sm">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Nombre</label>
+            <label className="text-sm font-medium text-gray-700">Name</label>
             <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Categoría</label>
+            <label className="text-sm font-medium text-gray-700">Category</label>
             <select
               className={inputClass}
               value={categoryId}
@@ -134,7 +134,7 @@ export function AdminProductEditPage() {
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Precio (CLP)</label>
+            <label className="text-sm font-medium text-gray-700">Price (CLP)</label>
             <input
               type="number"
               min={0}
@@ -146,7 +146,7 @@ export function AdminProductEditPage() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Descripción</label>
+            <label className="text-sm font-medium text-gray-700">Description</label>
             <textarea
               className={inputClass}
               rows={2}
@@ -155,12 +155,12 @@ export function AdminProductEditPage() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-gray-700">URL de imagen</label>
+            <label className="text-sm font-medium text-gray-700">Image URL</label>
             <input
               className={inputClass}
               value={image}
               onChange={(e) => setImage(e.target.value)}
-              placeholder="https://…"
+              placeholder="/images/… or https://…"
             />
           </div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -170,7 +170,7 @@ export function AdminProductEditPage() {
               onChange={(e) => setActive(e.target.checked)}
               className="accent-brand"
             />
-            Activo (visible para el cliente)
+            Active (visible to customers)
           </label>
         </div>
 
@@ -181,7 +181,7 @@ export function AdminProductEditPage() {
           disabled={saving}
           className="mt-5 rounded-xl bg-brand px-6 py-2.5 font-semibold text-white disabled:opacity-60"
         >
-          {saving ? 'Guardando…' : 'Guardar producto'}
+          {saving ? 'Saving…' : 'Save product'}
         </button>
       </form>
 
@@ -229,7 +229,7 @@ function OptionsManager({
 
   return (
     <section className="mt-6">
-      <h2 className="mb-3 text-lg font-bold text-gray-900">Opciones de configuración</h2>
+      <h2 className="mb-3 text-lg font-bold text-gray-900">Configuration options</h2>
 
       {groups.map((group) => (
         <div key={group.id} className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
@@ -237,8 +237,8 @@ function OptionsManager({
             <div>
               <p className="font-semibold text-gray-900">{group.name}</p>
               <p className="text-xs text-gray-500">
-                {group.minSelect}–{group.maxSelect} selección ·{' '}
-                {group.active ? 'Activo' : 'Inactivo'}
+                {group.minSelect}–{group.maxSelect} selection ·{' '}
+                {group.active ? 'Active' : 'Inactive'}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -247,14 +247,14 @@ function OptionsManager({
                 onClick={() => toggleGroup(group)}
                 className="rounded-lg border border-gray-300 px-2 py-1 text-xs font-semibold text-gray-600"
               >
-                {group.active ? 'Desactivar' : 'Activar'}
+                {group.active ? 'Deactivate' : 'Activate'}
               </button>
               <button
                 type="button"
                 onClick={() => deleteOptionGroup(group.id).then(onChanged)}
                 className="rounded-lg border border-gray-300 px-2 py-1 text-xs font-semibold text-accent"
               >
-                Eliminar grupo
+                Delete group
               </button>
             </div>
           </div>
@@ -281,14 +281,14 @@ function OptionsManager({
                     }
                     className="rounded-lg border border-gray-300 px-2 py-1 text-xs font-semibold text-gray-600"
                   >
-                    {option.active ? 'Desactivar' : 'Activar'}
+                    {option.active ? 'Deactivate' : 'Activate'}
                   </button>
                   <button
                     type="button"
                     onClick={() => deleteOption(option.id).then(onChanged)}
                     className="text-xs font-semibold text-accent"
                   >
-                    Eliminar
+                    Delete
                   </button>
                 </div>
               </li>
@@ -302,7 +302,7 @@ function OptionsManager({
       <div className="flex gap-2">
         <input
           className={inputClass}
-          placeholder="Nombre del grupo (ej. Masa)"
+          placeholder="Group name (e.g. Crust)"
           value={newGroupName}
           onChange={(e) => setNewGroupName(e.target.value)}
         />
@@ -311,7 +311,7 @@ function OptionsManager({
           onClick={addGroup}
           className="shrink-0 rounded-xl bg-brand px-4 py-2 font-semibold text-white"
         >
-          + Agregar grupo
+          + Add group
         </button>
       </div>
     </section>
@@ -347,7 +347,7 @@ function AddOption({
     <div className="mt-3 flex gap-2">
       <input
         className={inputClass}
-        placeholder="Nueva opción (ej. Extra queso)"
+        placeholder="New option (e.g. Extra cheese)"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -364,7 +364,7 @@ function AddOption({
         onClick={add}
         className="mt-1 shrink-0 rounded-xl border border-brand px-3 font-semibold text-brand"
       >
-        + Agregar
+        + Add
       </button>
     </div>
   )

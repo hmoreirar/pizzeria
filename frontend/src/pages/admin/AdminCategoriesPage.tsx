@@ -14,7 +14,7 @@ export function AdminCategoriesPage() {
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(true)
 
-  // Formulario de nueva categoría.
+  // New category form.
   const [name, setName] = useState('')
   const [sortOrder, setSortOrder] = useState('0')
   const [active, setActive] = useState(true)
@@ -22,7 +22,7 @@ export function AdminCategoriesPage() {
   const load = () =>
     getAdminCategories()
       .then(setCategories)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
       .finally(() => setLoading(false))
 
   useEffect(() => {
@@ -39,7 +39,7 @@ export function AdminCategoriesPage() {
       setActive(true)
       load()
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo crear.')
+      setError(err instanceof Error ? err.message : 'Could not create.')
     }
   }
 
@@ -52,21 +52,21 @@ export function AdminCategoriesPage() {
     load()
   }
 
-  if (loading) return <p className="text-gray-500">Cargando…</p>
+  if (loading) return <p className="text-gray-500">Loading…</p>
   if (error) return <p className="text-accent">{error}</p>
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Categorías</h1>
+      <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Categories</h1>
 
       <form onSubmit={handleCreate} className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
         <div className="flex flex-wrap items-end gap-3">
           <div className="min-w-40 flex-1">
-            <label className="text-sm font-medium text-gray-700">Nombre</label>
+            <label className="text-sm font-medium text-gray-700">Name</label>
             <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div className="w-24">
-            <label className="text-sm font-medium text-gray-700">Orden</label>
+            <label className="text-sm font-medium text-gray-700">Sort order</label>
             <input
               type="number"
               min={0}
@@ -82,16 +82,16 @@ export function AdminCategoriesPage() {
               onChange={(e) => setActive(e.target.checked)}
               className="accent-brand"
             />
-            Activa
+            Active
           </label>
           <button type="submit" className="rounded-xl bg-brand px-4 py-2 font-semibold text-white">
-            + Agregar
+            + Add
           </button>
         </div>
       </form>
 
       {categories.length === 0 ? (
-        <p className="text-gray-500">No hay categorías.</p>
+        <p className="text-gray-500">No categories.</p>
       ) : (
         <div className="space-y-2">
           {categories.map((cat) => (
@@ -101,7 +101,7 @@ export function AdminCategoriesPage() {
             >
               <div>
                 <p className="font-semibold text-gray-900">{cat.name}</p>
-                <p className="text-xs text-gray-500">Orden: {cat.sortOrder}</p>
+                <p className="text-xs text-gray-500">Sort: {cat.sortOrder}</p>
               </div>
               <div className="flex items-center gap-3">
                 <span
@@ -109,14 +109,14 @@ export function AdminCategoriesPage() {
                     cat.active ? 'bg-leaf/15 text-leaf' : 'bg-gray-100 text-gray-500'
                   }`}
                 >
-                  {cat.active ? 'Activa' : 'Inactiva'}
+                  {cat.active ? 'Active' : 'Inactive'}
                 </span>
                 <button
                   type="button"
                   onClick={() => toggle(cat)}
                   className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
                 >
-                  {cat.active ? 'Desactivar' : 'Activar'}
+                  {cat.active ? 'Deactivate' : 'Activate'}
                 </button>
               </div>
             </div>

@@ -26,7 +26,7 @@ export function CheckoutPage() {
   useEffect(() => {
     getSettings()
       .then((s) => setDeliveryFee(s.deliveryFee))
-      .catch(() => setError('No se pudo cargar la configuración.'))
+      .catch(() => setError('Could not load settings.'))
   }, [])
 
   if (items.length === 0) {
@@ -34,12 +34,12 @@ export function CheckoutPage() {
       <div className="min-h-screen">
         <Header />
         <main className="mx-auto max-w-2xl px-4 py-10 text-center">
-          <p className="text-gray-500">Tu carrito está vacío.</p>
+          <p className="text-gray-500">Your cart is empty.</p>
           <Link
             to="/"
             className="mt-4 inline-block rounded-xl bg-brand px-6 py-3 font-semibold text-white"
           >
-            Ver menú
+            View menu
           </Link>
         </main>
       </div>
@@ -63,9 +63,9 @@ export function CheckoutPage() {
         })),
       })
       clearCart()
-      navigate(`/pedido/${order.id}`)
+      navigate(`/order/${order.id}`)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'No se pudo crear el pedido.')
+      setError(err instanceof Error ? err.message : 'Could not create the order.')
       setSubmitting(false)
     }
   }
@@ -77,10 +77,10 @@ export function CheckoutPage() {
       <main className="mx-auto max-w-2xl px-4 py-6 pb-24 sm:pb-6">
         <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Checkout</h1>
 
-        {/* Resumen del pedido */}
+        {/* Order summary */}
         <section className="mb-6 rounded-2xl bg-white p-4 shadow-sm">
           <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
-            Tu pedido
+            Your order
           </h2>
           <ul className="space-y-2">
             {items.map((item) => (
@@ -106,7 +106,7 @@ export function CheckoutPage() {
               <span>{formatPrice(subtotal)}</span>
             </div>
             <div className="mt-1 flex justify-between text-gray-600">
-              <span>Despacho</span>
+              <span>Delivery</span>
               <span>{deliveryFee !== null ? formatPrice(deliveryFee) : '…'}</span>
             </div>
             <div className="mt-2 flex justify-between text-base font-bold text-gray-900">
@@ -117,15 +117,15 @@ export function CheckoutPage() {
         </section>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          {/* Datos de entrega */}
+          {/* Delivery details */}
           <section className="rounded-2xl bg-white p-4 shadow-sm">
             <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
-              Datos de entrega
+              Delivery details
             </h2>
             <div className="space-y-3">
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="name">
-                  Nombre
+                  Name
                 </label>
                 <input
                   id="name"
@@ -138,7 +138,7 @@ export function CheckoutPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="phone">
-                  Teléfono
+                  Phone
                 </label>
                 <input
                   id="phone"
@@ -152,7 +152,7 @@ export function CheckoutPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="address">
-                  Dirección
+                  Address
                 </label>
                 <input
                   id="address"
@@ -165,7 +165,7 @@ export function CheckoutPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="commune">
-                  Comuna
+                  Commune
                 </label>
                 <input
                   id="commune"
@@ -176,7 +176,7 @@ export function CheckoutPage() {
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="instructions">
-                  Indicaciones (opcional)
+                  Delivery instructions (optional)
                 </label>
                 <textarea
                   id="instructions"
@@ -189,10 +189,10 @@ export function CheckoutPage() {
             </div>
           </section>
 
-          {/* Método de pago */}
+          {/* Payment method */}
           <section className="rounded-2xl bg-white p-4 shadow-sm">
             <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
-              Método de pago
+              Payment method
             </h2>
             <div className="space-y-2">
               <label
@@ -208,8 +208,8 @@ export function CheckoutPage() {
                   className="accent-brand"
                 />
                 <span>
-                  <span className="block font-medium">Efectivo</span>
-                  <span className="text-sm text-gray-500">Pago contra entrega</span>
+                  <span className="block font-medium">Cash</span>
+                  <span className="text-sm text-gray-500">Pay on delivery</span>
                 </span>
               </label>
               <label
@@ -225,8 +225,8 @@ export function CheckoutPage() {
                   className="accent-brand"
                 />
                 <span>
-                  <span className="block font-medium">Transferencia</span>
-                  <span className="text-sm text-gray-500">Confirmamos el pago manualmente</span>
+                  <span className="block font-medium">Bank transfer</span>
+                  <span className="text-sm text-gray-500">We confirm payment manually</span>
                 </span>
               </label>
             </div>
@@ -243,7 +243,7 @@ export function CheckoutPage() {
             disabled={submitting}
             className="w-full rounded-xl bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark disabled:opacity-60"
           >
-            {submitting ? 'Creando pedido…' : `Confirmar pedido · ${formatPrice(total)}`}
+            {submitting ? 'Creating order…' : `Place order · ${formatPrice(total)}`}
           </button>
         </form>
       </main>

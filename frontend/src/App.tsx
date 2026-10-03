@@ -18,10 +18,10 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<MenuPage />} />
-      <Route path="/producto/:id" element={<ProductPage />} />
-      <Route path="/carrito" element={<CartPage />} />
+      <Route path="/product/:id" element={<ProductPage />} />
+      <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
-      <Route path="/pedido/:id" element={<OrderConfirmationPage />} />
+      <Route path="/order/:id" element={<OrderConfirmationPage />} />
 
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route element={<RequireAdmin />}>

@@ -15,9 +15,9 @@ export function CategoryFilter({ categories, selected, onSelect }: Props) {
     }`
 
   return (
-    <nav aria-label="Categorías" className="flex gap-2 overflow-x-auto pb-1">
+    <nav aria-label="Categories" className="flex gap-2 overflow-x-auto pb-1">
       <button type="button" onClick={() => onSelect(null)} className={pill(selected === null)}>
-        Todas
+        All
       </button>
       {categories.map((c) => (
         <button

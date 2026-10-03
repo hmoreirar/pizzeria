@@ -25,7 +25,7 @@ export function ProductCard({ product }: { product: Product }) {
       {product.image ? (
         <img src={product.image} alt={product.name} className="h-40 w-full object-cover" />
       ) : (
-        <div className="flex h-40 w-full items-center justify-center bg-cream text-5xl">🍕</div>
+        <div className="flex h-40 w-full items-center justify-center bg-cream text-5xl">Pizza</div>
       )}
 
       <div className="flex flex-1 flex-col p-4">
@@ -39,12 +39,12 @@ export function ProductCard({ product }: { product: Product }) {
         </p>
 
         {product.configurable ? (
-          <Link to={`/producto/${product.id}`} className={addButtonClass}>
-            Agregar
+          <Link to={`/product/${product.id}`} className={addButtonClass}>
+            Add to cart
           </Link>
         ) : (
           <button type="button" onClick={handleAdd} className={addButtonClass}>
-            Agregar
+            Add to cart
           </button>
         )}
       </div>

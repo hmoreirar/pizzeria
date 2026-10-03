@@ -18,13 +18,13 @@ export function AdminLayout() {
     <div className="min-h-screen">
       <header className="bg-brand text-white">
         <div className="mx-auto flex max-w-5xl items-center justify-between px-4 py-3">
-          <span className="text-lg font-extrabold">🍕 Admin</span>
+          <span className="text-lg font-extrabold">Pizza House Admin</span>
           <button
             type="button"
             onClick={logout}
             className="rounded-lg bg-white/15 px-3 py-1.5 text-sm font-semibold"
           >
-            Salir
+            Sign out
           </button>
         </div>
         <nav className="mx-auto flex max-w-5xl gap-1 overflow-x-auto px-4 pb-2">
@@ -32,13 +32,13 @@ export function AdminLayout() {
             Dashboard
           </NavLink>
           <NavLink to="/admin/orders" className={linkClass}>
-            Pedidos
+            Orders
           </NavLink>
           <NavLink to="/admin/products" className={linkClass}>
-            Productos
+            Products
           </NavLink>
           <NavLink to="/admin/categories" className={linkClass}>
-            Categorías
+            Categories
           </NavLink>
         </nav>
       </header>

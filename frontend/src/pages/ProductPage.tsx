@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useState } from 'react'
 import { Link, useNavigate, useParams } from 'react-router'
 import { getProduct } from '../api'
 import { useCart, type CartItemOption } from '../cart/cart'
@@ -13,42 +13,45 @@ export function ProductPage() {
   const [product, setProduct] = useState<ProductDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
-  // groupId -> optionId seleccionado (por ahora grupos de selección única).
+  // groupId -> selected optionId (single-select groups for now).
   const [selected, setSelected] = useState<Record<number, number>>({})
   const [quantity, setQuantity] = useState(1)
 
-  useEffect(() => {
+  const load = useCallback(() => {
     const productId = Number(id)
     if (!Number.isInteger(productId) || productId <= 0) {
-      setError('Producto inválido.')
+      setError('Invalid product.')
       setLoading(false)
       return
     }
-
     getProduct(productId)
       .then((p) => {
         setProduct(p)
-        // Preseleccionamos la primera opción de cada grupo (la de menor precio).
+        // Preselect the first option of each group (lowest price).
         const initial: Record<number, number> = {}
         for (const g of p.optionGroups) {
           if (g.options.length > 0) initial[g.id] = g.options[0].id
         }
         setSelected(initial)
       })
-      .catch(() => setError('No se pudo cargar el producto.'))
+      .catch(() => setError('Could not load the product.'))
       .finally(() => setLoading(false))
   }, [id])
 
+  useEffect(() => {
+    load()
+  }, [load])
+
   if (loading) {
-    return <p className="p-6 text-gray-500">Cargando…</p>
+    return <p className="p-6 text-gray-500">Loading…</p>
   }
 
   if (error || !product) {
     return (
       <div className="p-6">
-        <p className="text-accent">{error ?? 'Producto no encontrado.'}</p>
+        <p className="text-accent">{error ?? 'Product not found.'}</p>
         <Link to="/" className="mt-4 inline-block font-semibold text-brand">
-          ← Volver al menú
+          ← Back to menu
         </Link>
       </div>
     )
@@ -87,13 +90,13 @@ export function ProductPage() {
       quantity,
       options,
     })
-    navigate('/carrito')
+    navigate('/cart')
   }
 
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 pb-24 sm:pb-6">
       <Link to="/" className="mb-4 inline-block font-semibold text-brand">
-        ← Volver al menú
+        ← Back to menu
       </Link>
 
       {product.image && (
@@ -148,13 +151,13 @@ export function ProductPage() {
       ))}
 
       <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-        <span className="text-gray-600">Cantidad</span>
+        <span className="text-gray-600">Quantity</span>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-            aria-label="Disminuir cantidad"
+            aria-label="Decrease quantity"
           >
             −
           </button>
@@ -163,7 +166,7 @@ export function ProductPage() {
             type="button"
             onClick={() => setQuantity((q) => q + 1)}
             className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-            aria-label="Aumentar cantidad"
+            aria-label="Increase quantity"
           >
             +
           </button>
@@ -171,7 +174,7 @@ export function ProductPage() {
       </div>
 
       <div className="mt-3 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-        <span className="text-gray-600">Total estimado</span>
+        <span className="text-gray-600">Estimated total</span>
         <span className="text-xl font-extrabold text-brand">{formatPrice(unitPrice * quantity)}</span>
       </div>
 
@@ -180,7 +183,7 @@ export function ProductPage() {
         onClick={handleAdd}
         className="mt-4 w-full rounded-xl bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
       >
-        Agregar al carrito
+        Add to cart
       </button>
 
       <MobileCartBar />

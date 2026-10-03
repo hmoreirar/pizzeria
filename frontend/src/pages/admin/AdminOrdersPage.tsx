@@ -13,19 +13,19 @@ export function AdminOrdersPage() {
   useEffect(() => {
     getAdminOrders()
       .then(setOrders)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-500">Cargando…</p>
+  if (loading) return <p className="text-gray-500">Loading…</p>
   if (error) return <p className="text-accent">{error}</p>
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Pedidos</h1>
+      <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Orders</h1>
 
       {orders.length === 0 ? (
-        <p className="text-gray-500">Aún no hay pedidos.</p>
+        <p className="text-gray-500">No orders yet.</p>
       ) : (
         <div className="space-y-2">
           {orders.map((order) => (

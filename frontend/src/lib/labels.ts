@@ -1,12 +1,12 @@
 import type { OrderStatus, PaymentMethod } from '../types'
 
 export const STATUS_LABELS: Record<OrderStatus, string> = {
-  pending: 'Pendiente',
-  confirmed: 'Confirmado',
-  preparing: 'Preparando',
-  out_for_delivery: 'En reparto',
-  delivered: 'Entregado',
-  cancelled: 'Cancelado',
+  pending: 'Pending',
+  confirmed: 'Confirmed',
+  preparing: 'Preparing',
+  out_for_delivery: 'Out for delivery',
+  delivered: 'Delivered',
+  cancelled: 'Cancelled',
 }
 
 export const STATUS_BADGE: Record<OrderStatus, string> = {
@@ -19,8 +19,8 @@ export const STATUS_BADGE: Record<OrderStatus, string> = {
 }
 
 export const PAYMENT_LABELS: Record<PaymentMethod, string> = {
-  cash: 'Efectivo',
-  transfer: 'Transferencia',
+  cash: 'Cash',
+  transfer: 'Bank transfer',
 }
 
 export const ORDER_STATUSES: OrderStatus[] = [

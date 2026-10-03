@@ -12,27 +12,27 @@ export function AdminProductsPage() {
   useEffect(() => {
     getAdminProducts()
       .then(setProducts)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-500">Cargando…</p>
+  if (loading) return <p className="text-gray-500">Loading…</p>
   if (error) return <p className="text-accent">{error}</p>
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold text-gray-900">Productos</h1>
+        <h1 className="text-2xl font-extrabold text-gray-900">Products</h1>
         <Link
           to="/admin/products/new"
           className="rounded-xl bg-brand px-4 py-2 font-semibold text-white"
         >
-          + Nuevo producto
+          + New product
         </Link>
       </div>
 
       {products.length === 0 ? (
-        <p className="text-gray-500">No hay productos.</p>
+        <p className="text-gray-500">No products.</p>
       ) : (
         <div className="space-y-2">
           {products.map((product) => (
@@ -44,8 +44,8 @@ export function AdminProductsPage() {
                 {product.image ? (
                   <img src={product.image} alt="" className="h-10 w-10 rounded-lg object-cover" />
                 ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cream text-xl">
-                    🍕
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cream text-xs">
+                    Pizza
                   </div>
                 )}
                 <div>
@@ -60,13 +60,13 @@ export function AdminProductsPage() {
                     product.active ? 'bg-leaf/15 text-leaf' : 'bg-gray-100 text-gray-500'
                   }`}
                 >
-                  {product.active ? 'Activo' : 'Inactivo'}
+                  {product.active ? 'Active' : 'Inactive'}
                 </span>
                 <Link
                   to={`/admin/products/${product.id}`}
                   className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
                 >
-                  Editar
+                  Edit
                 </Link>
               </div>
             </div>

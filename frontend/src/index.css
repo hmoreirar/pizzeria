@@ -24,6 +24,10 @@
 }
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     background-color: var(--color-cream);
     color: #1f2937;

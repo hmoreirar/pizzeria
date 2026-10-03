@@ -11,16 +11,16 @@ export function CartPage() {
       <Header />
 
       <main className="mx-auto max-w-2xl px-4 py-6">
-        <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Tu carrito</h1>
+        <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Your cart</h1>
 
         {items.length === 0 ? (
           <div className="text-center">
-            <p className="text-gray-500">Tu carrito está vacío.</p>
+            <p className="text-gray-500">Your cart is empty.</p>
             <Link
               to="/"
               className="mt-4 inline-block rounded-xl bg-brand px-6 py-3 font-semibold text-white"
             >
-              Ver menú
+              View menu
             </Link>
           </div>
         ) : (
@@ -35,8 +35,8 @@ export function CartPage() {
                       className="h-20 w-20 shrink-0 rounded-xl object-cover"
                     />
                   ) : (
-                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-cream text-3xl">
-                      🍕
+                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-cream text-xl">
+                      Pizza
                     </div>
                   )}
 
@@ -56,7 +56,7 @@ export function CartPage() {
                         type="button"
                         onClick={() => removeItem(item.key)}
                         className="text-gray-400 transition-colors hover:text-accent"
-                        aria-label={`Quitar ${item.name}`}
+                        aria-label={`Remove ${item.name}`}
                       >
                         ✕
                       </button>
@@ -68,7 +68,7 @@ export function CartPage() {
                           type="button"
                           onClick={() => setQuantity(item.key, item.quantity - 1)}
                           className="h-8 w-8 rounded-full border border-gray-300 font-semibold"
-                          aria-label="Disminuir cantidad"
+                          aria-label="Decrease quantity"
                         >
                           −
                         </button>
@@ -77,7 +77,7 @@ export function CartPage() {
                           type="button"
                           onClick={() => setQuantity(item.key, item.quantity + 1)}
                           className="h-8 w-8 rounded-full border border-gray-300 font-semibold"
-                          aria-label="Aumentar cantidad"
+                          aria-label="Increase quantity"
                         >
                           +
                         </button>
@@ -87,7 +87,7 @@ export function CartPage() {
                       </span>
                     </div>
                     <p className="mt-1 text-right text-xs text-gray-400">
-                      {formatPrice(item.unitPrice)} c/u
+                      {formatPrice(item.unitPrice)} each
                     </p>
                   </div>
                 </li>
@@ -99,15 +99,14 @@ export function CartPage() {
                 <span>Subtotal</span>
                 <span className="text-lg font-bold text-gray-900">{formatPrice(subtotal)}</span>
               </div>
-              <p className="mt-1 text-sm text-gray-400">El despacho se suma al confirmar el pedido.</p>
+              <p className="mt-1 text-sm text-gray-400">Delivery is added at checkout.</p>
             </div>
 
-            {/* Fase 4: checkout (datos de entrega + pago + creación de pedido). */}
             <Link
               to="/checkout"
               className="mt-4 block w-full rounded-xl bg-accent py-3 text-center font-semibold text-white transition-colors hover:bg-accent-dark"
             >
-              Continuar al checkout
+              Continue to checkout
             </Link>
           </>
         )}
