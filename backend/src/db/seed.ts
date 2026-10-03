@@ -27,10 +27,10 @@ async function seed() {
       [p.id, p.name, p.description, p.image, p.price],
     )
 
-    // Grupo "Tamaño": obligatorio, se elige exactamente una opción.
+    // Grupo "Size": obligatorio, se elige exactamente una opción.
     const group = await pool.query<{ id: number }>(
       `INSERT INTO option_groups (product_id, name, min_select, max_select, sort_order)
-       VALUES ($1, 'Tamaño', 1, 1, 0)
+       VALUES ($1, 'Size', 1, 1, 0)
        RETURNING id`,
       [p.id],
     )
