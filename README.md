@@ -1,4 +1,4 @@
-# 🍕 Pizzeria
+# Pizzeriapp
 
 Sistema de pedidos online para una pizzería local. MVP en construcción.
 
