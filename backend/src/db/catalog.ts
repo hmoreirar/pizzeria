@@ -78,7 +78,7 @@ export const simpleProducts = [
     name: 'Coppia Combo',
     description: '1 large pizza + truffle fries + 2 drinks.',
     price: 22900,
-    image: '/images/hero.jpg',
+    image: '/images/coppia.jpg',
   },
   {
     id: 4,
@@ -158,6 +158,6 @@ export const simpleProducts = [
     name: 'Lunch Express',
     description: 'Personal pizza + fries + drink.',
     price: 12900,
-    image: '/images/combo.jpg',
+    image: '/images/lunch.jpg',
   },
 ]
