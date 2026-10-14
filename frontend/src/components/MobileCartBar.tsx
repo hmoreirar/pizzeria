@@ -1,10 +1,12 @@
 import { Link } from 'react-router'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../cart/cart'
 import { formatPrice } from '../lib/format'
 
 // Persistent cart access on mobile (spec section 9).
 export function MobileCartBar() {
   const { itemCount, subtotal } = useCart()
+  const { t } = useTranslation()
 
   if (itemCount === 0) return null
 
@@ -15,9 +17,9 @@ export function MobileCartBar() {
         className="flex w-full items-center justify-between rounded-xl bg-accent px-4 py-3 font-semibold text-white"
       >
         <span>
-          Cart · {itemCount} {itemCount === 1 ? 'item' : 'items'}
+          {t('cart.label')} · {t('cart.items', { count: itemCount })}
         </span>
-        <span>{formatPrice(subtotal)} · View cart</span>
+        <span>{formatPrice(subtotal)} · {t('cart.view')}</span>
       </Link>
     </div>
   )

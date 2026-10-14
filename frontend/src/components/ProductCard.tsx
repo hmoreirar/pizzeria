@@ -1,4 +1,5 @@
 import { Link } from 'react-router'
+import { useTranslation } from 'react-i18next'
 import { useCart } from '../cart/cart'
 import { formatPrice, formatFromPrice } from '../lib/format'
 import type { Product } from '../types'
@@ -8,6 +9,7 @@ const addButtonClass =
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
+  const { t } = useTranslation()
 
   const handleAdd = () => {
     addItem({
@@ -25,7 +27,7 @@ export function ProductCard({ product }: { product: Product }) {
       {product.image ? (
         <img src={product.image} alt={product.name} className="h-40 w-full object-cover" />
       ) : (
-        <div className="flex h-40 w-full items-center justify-center bg-cream text-5xl">Pizza</div>
+        <div className="flex h-40 w-full items-center justify-center bg-cream text-5xl">{t('common.imageFallback')}</div>
       )}
 
       <div className="flex flex-1 flex-col p-4">
@@ -40,11 +42,11 @@ export function ProductCard({ product }: { product: Product }) {
 
         {product.configurable ? (
           <Link to={`/product/${product.id}`} className={addButtonClass}>
-            Add to cart
+            {t('product.addToCart')}
           </Link>
         ) : (
           <button type="button" onClick={handleAdd} className={addButtonClass}>
-            Add to cart
+            {t('product.addToCart')}
           </button>
         )}
       </div>

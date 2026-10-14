@@ -1,4 +1,5 @@
 import { useCallback, useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { getProduct } from '../api'
 import { useCart, type CartItemOption } from '../cart/cart'
@@ -10,6 +11,7 @@ export function ProductPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { addItem } = useCart()
+  const { t } = useTranslation()
   const [product, setProduct] = useState<ProductDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -20,7 +22,7 @@ export function ProductPage() {
   const load = useCallback(() => {
     const productId = Number(id)
     if (!Number.isInteger(productId) || productId <= 0) {
-      setError('Invalid product.')
+      setError('product.invalid')
       setLoading(false)
       return
     }
@@ -34,7 +36,7 @@ export function ProductPage() {
         }
         setSelected(initial)
       })
-      .catch(() => setError('Could not load the product.'))
+      .catch(() => setError('product.error'))
       .finally(() => setLoading(false))
   }, [id])
 
@@ -43,15 +45,15 @@ export function ProductPage() {
   }, [load])
 
   if (loading) {
-    return <p className="p-6 text-gray-500">Loading…</p>
+    return <p className="p-6 text-gray-500">{t('common.loading')}</p>
   }
 
   if (error || !product) {
     return (
       <div className="p-6">
-        <p className="text-accent">{error ?? 'Product not found.'}</p>
+        <p className="text-accent">{error ? t(error) : t('product.notFound')}</p>
         <Link to="/" className="mt-4 inline-block font-semibold text-brand">
-          ← Back to menu
+          {t('common.backToMenu')}
         </Link>
       </div>
     )
@@ -96,7 +98,7 @@ export function ProductPage() {
   return (
     <div className="mx-auto max-w-2xl px-4 py-6 pb-24 sm:pb-6">
       <Link to="/" className="mb-4 inline-block font-semibold text-brand">
-        ← Back to menu
+        {t('common.backToMenu')}
       </Link>
 
       {product.image && (
@@ -151,13 +153,13 @@ export function ProductPage() {
       ))}
 
       <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-        <span className="text-gray-600">Quantity</span>
+        <span className="text-gray-600">{t('product.quantity')}</span>
         <div className="flex items-center gap-3">
           <button
             type="button"
             onClick={() => setQuantity((q) => Math.max(1, q - 1))}
             className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-            aria-label="Decrease quantity"
+            aria-label={t('product.decreaseQty')}
           >
             −
           </button>
@@ -166,7 +168,7 @@ export function ProductPage() {
             type="button"
             onClick={() => setQuantity((q) => q + 1)}
             className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-            aria-label="Increase quantity"
+            aria-label={t('product.increaseQty')}
           >
             +
           </button>
@@ -174,7 +176,7 @@ export function ProductPage() {
       </div>
 
       <div className="mt-3 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-        <span className="text-gray-600">Estimated total</span>
+        <span className="text-gray-600">{t('product.estimatedTotal')}</span>
         <span className="text-xl font-extrabold text-brand">{formatPrice(unitPrice * quantity)}</span>
       </div>
 
@@ -183,7 +185,7 @@ export function ProductPage() {
         onClick={handleAdd}
         className="mt-4 w-full rounded-xl bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
       >
-        Add to cart
+        {t('product.addToCart')}
       </button>
 
       <MobileCartBar />
