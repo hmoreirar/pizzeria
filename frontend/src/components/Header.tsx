@@ -34,7 +34,9 @@ export function Header() {
               <circle cx="20" cy="21" r="1" />
               <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
             </svg>
-            <span>{itemCount > 0 ? `${itemCount} · ${formatPrice(subtotal)}` : t('cart.label')}</span>
+            <span key={itemCount} className={itemCount > 0 ? 'inline-block animate-[cart-pop_350ms_ease-out]' : ''}>
+              {itemCount > 0 ? `${itemCount} · ${formatPrice(subtotal)}` : t('cart.label')}
+            </span>
           </Link>
         </div>
       </div>

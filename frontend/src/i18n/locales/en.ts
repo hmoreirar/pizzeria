@@ -43,6 +43,7 @@ export const en: typeof es = {
     view: 'View cart',
     items_one: 'item',
     items_other: 'items',
+    added: 'Added to cart',
     remove: 'Remove {{name}}',
     decreaseQty: 'Decrease quantity',
     increaseQty: 'Increase quantity',
@@ -72,6 +73,11 @@ export const en: typeof es = {
     placeOrder: 'Place order · {{total}}',
     errorSettings: 'Could not load settings.',
     errorCreate: 'Could not create the order.',
+    errors: {
+      name: 'Enter your name.',
+      phone: 'Enter a valid phone number.',
+      address: 'Enter your address.',
+    },
   },
   order: {
     received: 'Order received!',

@@ -42,6 +42,7 @@ export const es = {
     view: 'Ver carrito',
     items_one: 'artículo',
     items_other: 'artículos',
+    added: 'Añadido al carrito',
     remove: 'Quitar {{name}}',
     decreaseQty: 'Disminuir cantidad',
     increaseQty: 'Aumentar cantidad',
@@ -71,6 +72,11 @@ export const es = {
     placeOrder: 'Realizar pedido · {{total}}',
     errorSettings: 'No se pudo cargar la configuración.',
     errorCreate: 'No se pudo crear el pedido.',
+    errors: {
+      name: 'Ingresa tu nombre.',
+      phone: 'Ingresa un teléfono válido.',
+      address: 'Ingresa tu dirección.',
+    },
   },
   order: {
     received: '¡Pedido recibido!',

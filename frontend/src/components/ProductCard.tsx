@@ -2,14 +2,16 @@ import { Link } from 'react-router'
 import { useTranslation } from 'react-i18next'
 import { useCart } from '../cart/cart'
 import { formatPrice, formatFromPrice } from '../lib/format'
+import { useToast } from './toast-context'
 import type { Product } from '../types'
 
 const addButtonClass =
-  'mt-3 rounded-xl bg-accent px-4 py-2 text-center font-semibold text-white transition-colors hover:bg-accent-dark'
+  'mt-3 rounded-xl border border-brand px-4 py-2 text-center font-semibold text-brand transition-colors hover:bg-brand hover:text-white'
 
 export function ProductCard({ product }: { product: Product }) {
   const { addItem } = useCart()
   const { t } = useTranslation()
+  const showToast = useToast()
 
   const handleAdd = () => {
     addItem({
@@ -20,6 +22,7 @@ export function ProductCard({ product }: { product: Product }) {
       quantity: 1,
       options: [],
     })
+    showToast(t('cart.added'))
   }
 
   return (

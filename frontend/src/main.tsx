@@ -5,12 +5,15 @@ import './i18n'
 import './index.css'
 import App from './App.tsx'
 import { CartProvider } from './cart/CartProvider.tsx'
+import { ToastProvider } from './components/Toast.tsx'
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
     <BrowserRouter>
       <CartProvider>
-        <App />
+        <ToastProvider>
+          <App />
+        </ToastProvider>
       </CartProvider>
     </BrowserRouter>
   </StrictMode>,

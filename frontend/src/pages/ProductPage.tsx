@@ -45,7 +45,22 @@ export function ProductPage() {
   }, [load])
 
   if (loading) {
-    return <p className="p-6 text-gray-500">{t('common.loading')}</p>
+    return (
+      <div className="mx-auto max-w-5xl px-4 py-6">
+        <div className="h-4 w-32 animate-pulse rounded bg-gray-200" aria-hidden="true" />
+        <div className="mt-4 grid gap-8 lg:grid-cols-2 lg:items-start" aria-hidden="true">
+          <div className="aspect-square w-full animate-pulse rounded-2xl bg-white" />
+          <div className="space-y-4">
+            <div className="h-8 w-2/3 animate-pulse rounded bg-gray-200" />
+            <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
+            <div className="h-4 w-4/5 animate-pulse rounded bg-gray-200" />
+            <div className="h-14 w-full animate-pulse rounded-2xl bg-white" />
+            <div className="h-14 w-full animate-pulse rounded-2xl bg-white" />
+            <div className="h-12 w-full animate-pulse rounded-xl bg-gray-200" />
+          </div>
+        </div>
+      </div>
+    )
   }
 
   if (error || !product) {
@@ -96,97 +111,107 @@ export function ProductPage() {
   }
 
   return (
-    <div className="mx-auto max-w-2xl px-4 py-6 pb-24 sm:pb-6">
+    <div className="mx-auto max-w-5xl px-4 py-6 pb-24 sm:pb-6">
       <Link to="/" className="mb-4 inline-block font-semibold text-brand">
         {t('common.backToMenu')}
       </Link>
 
-      {product.image && (
-        <img
-          src={product.image}
-          alt={product.name}
-          className="h-56 w-full rounded-2xl object-cover"
-        />
-      )}
+      <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
+        <div className="lg:sticky lg:top-20">
+          {product.image ? (
+            <img
+              src={product.image}
+              alt={product.name}
+              className="aspect-square w-full rounded-2xl object-cover shadow-sm"
+            />
+          ) : (
+            <div className="flex aspect-square w-full items-center justify-center rounded-2xl bg-white text-6xl text-gray-300">
+              {t('common.imageFallback')}
+            </div>
+          )}
+        </div>
 
-      <h1 className="mt-4 text-2xl font-extrabold text-gray-900">{product.name}</h1>
-      {product.description && <p className="mt-2 text-gray-600">{product.description}</p>}
+        <div>
+          <h1 className="text-2xl font-extrabold text-gray-900">{product.name}</h1>
+          {product.description && <p className="mt-2 text-gray-600">{product.description}</p>}
 
-      {product.optionGroups.map((group) => (
-        <fieldset key={group.id} className="mt-6">
-          <legend className="mb-2 text-sm font-bold uppercase tracking-wide text-gray-500">
-            {group.name}
-            {group.minSelect > 0 && <span className="text-accent"> *</span>}
-          </legend>
-          <div className="space-y-2">
-            {group.options.map((option) => {
-              const isSelected = selected[group.id] === option.id
-              return (
-                <label
-                  key={option.id}
-                  className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 ${
-                    isSelected ? 'border-brand bg-brand/5' : 'border-gray-200 bg-white'
-                  }`}
-                >
-                  <span className="flex items-center gap-3">
-                    <input
-                      type="radio"
-                      name={`group-${group.id}`}
-                      checked={isSelected}
-                      onChange={() =>
-                        setSelected((prev) => ({ ...prev, [group.id]: option.id }))
-                      }
-                      className="accent-brand"
-                    />
-                    <span className="font-medium">{option.name}</span>
-                  </span>
-                  {option.priceDelta > 0 && (
-                    <span className="text-sm font-semibold text-gray-500">
-                      +{formatPrice(option.priceDelta)}
-                    </span>
-                  )}
-                </label>
-              )
-            })}
+          {product.optionGroups.map((group) => (
+            <fieldset key={group.id} className="mt-6">
+              <legend className="mb-2 text-sm font-bold uppercase tracking-wide text-gray-500">
+                {group.name}
+                {group.minSelect > 0 && <span className="text-accent"> *</span>}
+              </legend>
+              <div className="space-y-2">
+                {group.options.map((option) => {
+                  const isSelected = selected[group.id] === option.id
+                  return (
+                    <label
+                      key={option.id}
+                      className={`flex cursor-pointer items-center justify-between rounded-xl border px-4 py-3 ${
+                        isSelected ? 'border-brand bg-brand/5' : 'border-gray-200 bg-white'
+                      }`}
+                    >
+                      <span className="flex items-center gap-3">
+                        <input
+                          type="radio"
+                          name={`group-${group.id}`}
+                          checked={isSelected}
+                          onChange={() =>
+                            setSelected((prev) => ({ ...prev, [group.id]: option.id }))
+                          }
+                          className="accent-brand"
+                        />
+                        <span className="font-medium">{option.name}</span>
+                      </span>
+                      {option.priceDelta > 0 && (
+                        <span className="text-sm font-semibold text-gray-500">
+                          +{formatPrice(option.priceDelta)}
+                        </span>
+                      )}
+                    </label>
+                  )
+                })}
+              </div>
+            </fieldset>
+          ))}
+
+          <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
+            <span className="text-gray-600">{t('product.quantity')}</span>
+            <div className="flex items-center gap-3">
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => Math.max(1, q - 1))}
+                className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
+                aria-label={t('product.decreaseQty')}
+              >
+                −
+              </button>
+              <span className="w-6 text-center text-lg font-semibold">{quantity}</span>
+              <button
+                type="button"
+                onClick={() => setQuantity((q) => q + 1)}
+                className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
+                aria-label={t('product.increaseQty')}
+              >
+                +
+              </button>
+            </div>
           </div>
-        </fieldset>
-      ))}
 
-      <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-        <span className="text-gray-600">{t('product.quantity')}</span>
-        <div className="flex items-center gap-3">
+          <div className="mt-3 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
+            <span className="text-gray-600">{t('product.estimatedTotal')}</span>
+            <span className="text-xl font-extrabold text-brand">{formatPrice(unitPrice * quantity)}</span>
+          </div>
+
           <button
             type="button"
-            onClick={() => setQuantity((q) => Math.max(1, q - 1))}
-            className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-            aria-label={t('product.decreaseQty')}
+            onClick={handleAdd}
+            className="mt-4 w-full rounded-xl bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
           >
-            −
-          </button>
-          <span className="w-6 text-center text-lg font-semibold">{quantity}</span>
-          <button
-            type="button"
-            onClick={() => setQuantity((q) => q + 1)}
-            className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-            aria-label={t('product.increaseQty')}
-          >
-            +
+            {t('product.addToCart')}
           </button>
         </div>
       </div>
-
-      <div className="mt-3 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-        <span className="text-gray-600">{t('product.estimatedTotal')}</span>
-        <span className="text-xl font-extrabold text-brand">{formatPrice(unitPrice * quantity)}</span>
-      </div>
-
-      <button
-        type="button"
-        onClick={handleAdd}
-        className="mt-4 w-full rounded-xl bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
-      >
-        {t('product.addToCart')}
-      </button>
 
       <MobileCartBar />
     </div>

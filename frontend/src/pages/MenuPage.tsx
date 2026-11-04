@@ -57,6 +57,25 @@ function CategoryNav({ categories }: { categories: Category[] }) {
   )
 }
 
+function ProductGridSkeleton() {
+  return (
+    <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
+      {Array.from({ length: 6 }).map((_, index) => (
+        <div key={index} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+          <div className="h-40 w-full animate-pulse bg-cream" />
+          <div className="space-y-3 p-4">
+            <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200" />
+            <div className="h-3 w-full animate-pulse rounded bg-gray-100" />
+            <div className="h-3 w-4/5 animate-pulse rounded bg-gray-100" />
+            <div className="h-5 w-1/3 animate-pulse rounded bg-gray-200" />
+            <div className="h-9 w-full animate-pulse rounded-xl bg-gray-100" />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
+}
+
 export function MenuPage() {
   const { t } = useTranslation()
   const [categories, setCategories] = useState<Category[]>([])
@@ -94,7 +113,7 @@ export function MenuPage() {
         {error && <p className="mb-4 text-accent">{t(error)}</p>}
 
         {loading ? (
-          <p className="text-gray-500">{t('common.loading')}</p>
+          <ProductGridSkeleton />
         ) : (
           sections.map(({ category, products: items }) => {
             // Category names come from the catalog and stay in English,

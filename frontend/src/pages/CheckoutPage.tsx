@@ -8,7 +8,7 @@ import { formatPrice } from '../lib/format'
 import type { PaymentMethod } from '../types'
 
 const inputClass =
-  'mt-1 w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-brand focus:outline-none'
+  'mt-1 w-full rounded-xl border bg-white px-3 py-2 text-gray-900 focus:border-brand focus:outline-none'
 
 export function CheckoutPage() {
   const navigate = useNavigate()
@@ -26,6 +26,8 @@ export function CheckoutPage() {
   // Either a translation key (our own failure) or a raw API message.
   const [errorKey, setErrorKey] = useState<string | null>(null)
   const [errorMessage, setErrorMessage] = useState<string | null>(null)
+  // Field name -> translation key.
+  const [errors, setErrors] = useState<Record<string, string>>({})
 
   useEffect(() => {
     getSettings()
@@ -52,8 +54,34 @@ export function CheckoutPage() {
 
   const total = subtotal + (deliveryFee ?? 0)
 
+  const fieldClass = (field: string) =>
+    `${inputClass} ${errors[field] ? 'border-accent' : 'border-gray-300'}`
+
+  function clearError(field: string) {
+    setErrors((prev) => {
+      if (!prev[field]) return prev
+      const next = { ...prev }
+      delete next[field]
+      return next
+    })
+  }
+
+  function validate(): Record<string, string> {
+    const next: Record<string, string> = {}
+    if (name.trim().length < 2) next.name = 'checkout.errors.name'
+    if (phone.replace(/\D/g, '').length < 8) next.phone = 'checkout.errors.phone'
+    if (address.trim().length < 5) next.address = 'checkout.errors.address'
+    return next
+  }
+
   async function handleSubmit(e: FormEvent) {
     e.preventDefault()
+    const nextErrors = validate()
+    if (Object.keys(nextErrors).length > 0) {
+      setErrors(nextErrors)
+      return
+    }
+    setErrors({})
     setSubmitting(true)
     setErrorKey(null)
     setErrorMessage(null)
@@ -122,7 +150,7 @@ export function CheckoutPage() {
           </div>
         </section>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} noValidate className="space-y-6">
           {/* Delivery details */}
           <section className="rounded-2xl bg-white p-4 shadow-sm">
             <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
@@ -135,12 +163,22 @@ export function CheckoutPage() {
                 </label>
                 <input
                   id="name"
-                  className={inputClass}
+                  className={fieldClass('name')}
                   value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  onChange={(e) => {
+                    setName(e.target.value)
+                    clearError('name')
+                  }}
                   required
                   autoComplete="name"
+                  aria-invalid={Boolean(errors.name)}
+                  aria-describedby={errors.name ? 'name-error' : undefined}
                 />
+                {errors.name && (
+                  <p id="name-error" className="mt-1 text-xs font-medium text-accent">
+                    {t(errors.name)}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="phone">
@@ -149,12 +187,22 @@ export function CheckoutPage() {
                 <input
                   id="phone"
                   type="tel"
-                  className={inputClass}
+                  className={fieldClass('phone')}
                   value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
+                  onChange={(e) => {
+                    setPhone(e.target.value)
+                    clearError('phone')
+                  }}
                   required
                   autoComplete="tel"
+                  aria-invalid={Boolean(errors.phone)}
+                  aria-describedby={errors.phone ? 'phone-error' : undefined}
                 />
+                {errors.phone && (
+                  <p id="phone-error" className="mt-1 text-xs font-medium text-accent">
+                    {t(errors.phone)}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="address">
@@ -162,12 +210,22 @@ export function CheckoutPage() {
                 </label>
                 <input
                   id="address"
-                  className={inputClass}
+                  className={fieldClass('address')}
                   value={address}
-                  onChange={(e) => setAddress(e.target.value)}
+                  onChange={(e) => {
+                    setAddress(e.target.value)
+                    clearError('address')
+                  }}
                   required
                   autoComplete="street-address"
+                  aria-invalid={Boolean(errors.address)}
+                  aria-describedby={errors.address ? 'address-error' : undefined}
                 />
+                {errors.address && (
+                  <p id="address-error" className="mt-1 text-xs font-medium text-accent">
+                    {t(errors.address)}
+                  </p>
+                )}
               </div>
               <div>
                 <label className="text-sm font-medium text-gray-700" htmlFor="commune">
