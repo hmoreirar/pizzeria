@@ -21,29 +21,32 @@ function scrollToMenu() {
 
 function Hero() {
   return (
-    <section className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
-      <div className="grid items-center gap-8 md:grid-cols-2">
-        <div>
-          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ember">Pizza House</p>
-          <h1 className="mt-3 text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl">
-            Pizza caliente y recién horneada a tu puerta
-          </h1>
-          <p className="mt-4 text-lg text-gray-600">
-            Horneada en horno de piedra, ingredientes premium. Pide online en minutos.
-          </p>
-          <button
-            type="button"
-            onClick={scrollToMenu}
-            className="mt-6 rounded-lg bg-accent px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
-          >
-            Pedir ahora
-          </button>
-        </div>
+    <section className="mx-auto max-w-5xl px-4 pt-8 pb-6">
+      <div className="relative isolate overflow-hidden rounded-xl">
         <img
           src="/images/hero.jpg"
           alt="Pizza Margherita recién horneada"
-          className="aspect-[4/3] w-full rounded-xl object-cover"
+          className="h-[280px] w-full object-cover object-center sm:h-[380px]"
         />
+        <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
+        <div className="absolute inset-0 flex items-center">
+          <div className="max-w-lg px-6 sm:px-10">
+            <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ember">Pizza House</p>
+            <h1 className="mt-2 text-3xl font-extrabold leading-tight text-white sm:text-4xl">
+              Pizza caliente y recién horneada a tu puerta
+            </h1>
+            <p className="mt-3 text-base text-white/90 sm:text-lg">
+              Horneada en horno de piedra, ingredientes premium. Pide online en minutos.
+            </p>
+            <button
+              type="button"
+              onClick={scrollToMenu}
+              className="mt-5 rounded-lg bg-accent px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
+            >
+              Pedir ahora
+            </button>
+          </div>
+        </div>
       </div>
     </section>
   )
