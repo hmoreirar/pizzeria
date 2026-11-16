@@ -1,39 +1,49 @@
 import { useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { getCategories, getProducts } from '../api'
 import { Header } from '../components/Header'
 import { MobileCartBar } from '../components/MobileCartBar'
 import { ProductCard } from '../components/ProductCard'
 import type { Category, Product } from '../types'
 
+// Category taglines. Keyed by the stable placeholder category ids
+// (1 Pizzas, 2 Combos, 3 Acompañamientos, 4 Bebidas, 5 Ofertas).
+const TAGLINES: Record<number, string> = {
+  1: 'Hechas a mano, horneadas en piedra al momento.',
+  2: 'Platos para compartir.',
+  3: 'Los acompañamientos perfectos.',
+  4: 'Frías y refrescantes.',
+  5: 'Gran valor, por tiempo limitado.',
+}
+
 function scrollToMenu() {
   document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
 }
 
 function Hero() {
-  const { t } = useTranslation()
-
   return (
-    <section className="relative isolate overflow-hidden">
-      <img src="/images/hero.jpg" alt="" className="h-[62vh] min-h-[420px] w-full object-cover" />
-      <div className="absolute inset-0 bg-gradient-to-r from-black/70 via-black/40 to-transparent" />
-      <div className="absolute inset-0 flex items-center">
-        <div className="mx-auto w-full max-w-5xl px-4">
-          <div className="max-w-xl">
-            <p className="text-sm font-bold uppercase tracking-widest text-ember">Pizza House</p>
-            <h1 className="mt-2 text-4xl font-extrabold leading-tight text-white sm:text-5xl">
-              {t('menu.heroTitle')}
-            </h1>
-            <p className="mt-3 text-lg text-white/90">{t('menu.heroSubtitle')}</p>
-            <button
-              type="button"
-              onClick={scrollToMenu}
-              className="mt-6 rounded-xl bg-accent px-8 py-3.5 text-lg font-bold text-white shadow-lg transition-colors hover:bg-accent-dark"
-            >
-              {t('menu.heroCta')}
-            </button>
-          </div>
+    <section className="mx-auto max-w-5xl px-4 py-12 sm:py-16">
+      <div className="grid items-center gap-8 md:grid-cols-2">
+        <div>
+          <p className="text-xs font-semibold uppercase tracking-[0.2em] text-ember">Pizza House</p>
+          <h1 className="mt-3 text-4xl font-extrabold leading-tight text-gray-900 sm:text-5xl">
+            Pizza caliente y recién horneada a tu puerta
+          </h1>
+          <p className="mt-4 text-lg text-gray-600">
+            Horneada en horno de piedra, ingredientes premium. Pide online en minutos.
+          </p>
+          <button
+            type="button"
+            onClick={scrollToMenu}
+            className="mt-6 rounded-lg bg-accent px-6 py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
+          >
+            Pedir ahora
+          </button>
         </div>
+        <img
+          src="/images/hero.jpg"
+          alt="Pizza Margherita recién horneada"
+          className="aspect-[4/3] w-full rounded-xl object-cover"
+        />
       </div>
     </section>
   )
@@ -41,13 +51,13 @@ function Hero() {
 
 function CategoryNav({ categories }: { categories: Category[] }) {
   return (
-    <nav className="sticky top-14 z-20 border-b border-black/10 bg-cream/95 backdrop-blur">
+    <nav className="sticky top-[52px] z-20 border-b border-black/5 bg-cream/95 backdrop-blur">
       <div className="mx-auto flex max-w-5xl gap-2 overflow-x-auto px-4 py-3">
         {categories.map((c) => (
           <a
             key={c.id}
             href={`#cat-${c.id}`}
-            className="shrink-0 rounded-full bg-white px-4 py-1.5 text-sm font-semibold text-brand shadow-sm transition-colors hover:bg-brand hover:text-white"
+            className="shrink-0 rounded-full border border-black/10 px-4 py-1.5 text-sm font-medium text-gray-700 transition-colors hover:border-brand hover:text-brand"
           >
             {c.name}
           </a>
@@ -61,14 +71,14 @@ function ProductGridSkeleton() {
   return (
     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" aria-hidden="true">
       {Array.from({ length: 6 }).map((_, index) => (
-        <div key={index} className="overflow-hidden rounded-2xl bg-white shadow-sm">
+        <div key={index} className="overflow-hidden rounded-xl border border-black/5 bg-white">
           <div className="h-40 w-full animate-pulse bg-cream" />
           <div className="space-y-3 p-4">
             <div className="h-4 w-2/3 animate-pulse rounded bg-gray-200" />
             <div className="h-3 w-full animate-pulse rounded bg-gray-100" />
             <div className="h-3 w-4/5 animate-pulse rounded bg-gray-100" />
             <div className="h-5 w-1/3 animate-pulse rounded bg-gray-200" />
-            <div className="h-9 w-full animate-pulse rounded-xl bg-gray-100" />
+            <div className="h-9 w-full animate-pulse rounded-lg bg-gray-100" />
           </div>
         </div>
       ))}
@@ -77,7 +87,6 @@ function ProductGridSkeleton() {
 }
 
 export function MenuPage() {
-  const { t } = useTranslation()
   const [categories, setCategories] = useState<Category[]>([])
   const [products, setProducts] = useState<Product[]>([])
   const [loading, setLoading] = useState(true)
@@ -89,7 +98,7 @@ export function MenuPage() {
         setCategories(cats)
         setProducts(prods)
       })
-      .catch(() => setError('menu.error'))
+      .catch(() => setError('No se pudo cargar el menú.'))
       .finally(() => setLoading(false))
   }, [])
 
@@ -105,31 +114,28 @@ export function MenuPage() {
       {categories.length > 0 && <CategoryNav categories={categories} />}
 
       <main id="menu" className="mx-auto max-w-5xl scroll-mt-24 px-4 py-10">
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl font-extrabold text-gray-900">{t('menu.title')}</h2>
-          <p className="mt-1 text-gray-500">{t('menu.subtitle')}</p>
+        <div className="mb-10">
+          <h2 className="text-2xl font-bold text-gray-900">Nuestro menú</h2>
+          <p className="mt-1 text-gray-500">Elige tus favoritos. Te los llevamos a tu puerta.</p>
         </div>
 
-        {error && <p className="mb-4 text-accent">{t(error)}</p>}
+        {error && <p className="mb-4 text-accent">{error}</p>}
 
         {loading ? (
           <ProductGridSkeleton />
         ) : (
           sections.map(({ category, products: items }) => {
-            // Category names come from the catalog and stay in English,
-            // so they double as translation keys for the taglines.
-            const tagline = t(`menu.taglines.${category.name}`, { defaultValue: '' })
+            const tagline = TAGLINES[category.id]
 
             return (
               <section key={category.id} id={`cat-${category.id}`} className="mb-12 scroll-mt-28">
                 <div className="mb-6">
-                  <h3 className="text-2xl font-extrabold text-gray-900">{category.name}</h3>
-                  {tagline && <p className="mt-1 text-gray-500">{tagline}</p>}
-                  <div className="mt-3 h-1 w-16 rounded bg-accent" />
+                  <h3 className="text-xl font-bold text-gray-900">{category.name}</h3>
+                  {tagline && <p className="mt-1 text-sm text-gray-500">{tagline}</p>}
                 </div>
 
                 {items.length === 0 ? (
-                  <p className="text-gray-400">{t('menu.empty')}</p>
+                  <p className="text-gray-400">Sin productos en esta sección.</p>
                 ) : (
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                     {items.map((p) => (

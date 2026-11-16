@@ -1,5 +1,4 @@
 import { useCallback, useEffect, useState } from 'react'
-import { useTranslation } from 'react-i18next'
 import { Link, useNavigate, useParams } from 'react-router'
 import { getProduct } from '../api'
 import { useCart, type CartItemOption } from '../cart/cart'
@@ -11,7 +10,6 @@ export function ProductPage() {
   const { id } = useParams()
   const navigate = useNavigate()
   const { addItem } = useCart()
-  const { t } = useTranslation()
   const [product, setProduct] = useState<ProductDetail | null>(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
@@ -22,7 +20,7 @@ export function ProductPage() {
   const load = useCallback(() => {
     const productId = Number(id)
     if (!Number.isInteger(productId) || productId <= 0) {
-      setError('product.invalid')
+      setError('Producto no válido.')
       setLoading(false)
       return
     }
@@ -36,7 +34,7 @@ export function ProductPage() {
         }
         setSelected(initial)
       })
-      .catch(() => setError('product.error'))
+      .catch(() => setError('No se pudo cargar el producto.'))
       .finally(() => setLoading(false))
   }, [id])
 
@@ -49,13 +47,13 @@ export function ProductPage() {
       <div className="mx-auto max-w-5xl px-4 py-6">
         <div className="h-4 w-32 animate-pulse rounded bg-gray-200" aria-hidden="true" />
         <div className="mt-4 grid gap-8 lg:grid-cols-2 lg:items-start" aria-hidden="true">
-          <div className="aspect-square w-full animate-pulse rounded-2xl bg-white" />
+          <div className="aspect-square w-full animate-pulse rounded-xl bg-white" />
           <div className="space-y-4">
             <div className="h-8 w-2/3 animate-pulse rounded bg-gray-200" />
             <div className="h-4 w-full animate-pulse rounded bg-gray-200" />
             <div className="h-4 w-4/5 animate-pulse rounded bg-gray-200" />
-            <div className="h-14 w-full animate-pulse rounded-2xl bg-white" />
-            <div className="h-14 w-full animate-pulse rounded-2xl bg-white" />
+            <div className="h-14 w-full animate-pulse rounded-xl bg-white" />
+            <div className="h-14 w-full animate-pulse rounded-xl bg-white" />
             <div className="h-12 w-full animate-pulse rounded-xl bg-gray-200" />
           </div>
         </div>
@@ -66,9 +64,9 @@ export function ProductPage() {
   if (error || !product) {
     return (
       <div className="p-6">
-        <p className="text-accent">{error ? t(error) : t('product.notFound')}</p>
+        <p className="text-accent">{error ?? 'Producto no encontrado.'}</p>
         <Link to="/" className="mt-4 inline-block font-semibold text-brand">
-          {t('common.backToMenu')}
+          ← Volver al menú
         </Link>
       </div>
     )
@@ -113,7 +111,7 @@ export function ProductPage() {
   return (
     <div className="mx-auto max-w-5xl px-4 py-6 pb-24 sm:pb-6">
       <Link to="/" className="mb-4 inline-block font-semibold text-brand">
-        {t('common.backToMenu')}
+        ← Volver al menú
       </Link>
 
       <div className="grid gap-8 lg:grid-cols-2 lg:items-start">
@@ -122,17 +120,17 @@ export function ProductPage() {
             <img
               src={product.image}
               alt={product.name}
-              className="aspect-square w-full rounded-2xl object-cover shadow-sm"
+              className="aspect-square w-full rounded-xl object-cover"
             />
           ) : (
-            <div className="flex aspect-square w-full items-center justify-center rounded-2xl bg-white text-6xl text-gray-300">
-              {t('common.imageFallback')}
+            <div className="flex aspect-square w-full items-center justify-center rounded-xl bg-white text-sm text-gray-400">
+              Pizza
             </div>
           )}
         </div>
 
         <div>
-          <h1 className="text-2xl font-extrabold text-gray-900">{product.name}</h1>
+          <h1 className="text-2xl font-bold text-gray-900">{product.name}</h1>
           {product.description && <p className="mt-2 text-gray-600">{product.description}</p>}
 
           {product.optionGroups.map((group) => (
@@ -175,14 +173,14 @@ export function ProductPage() {
             </fieldset>
           ))}
 
-          <div className="mt-6 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-            <span className="text-gray-600">{t('product.quantity')}</span>
+          <div className="mt-6 flex items-center justify-between rounded-xl border border-black/5 bg-white p-4">
+            <span className="text-gray-600">Cantidad</span>
             <div className="flex items-center gap-3">
               <button
                 type="button"
                 onClick={() => setQuantity((q) => Math.max(1, q - 1))}
                 className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-                aria-label={t('product.decreaseQty')}
+                aria-label="Disminuir cantidad"
               >
                 −
               </button>
@@ -191,24 +189,24 @@ export function ProductPage() {
                 type="button"
                 onClick={() => setQuantity((q) => q + 1)}
                 className="h-9 w-9 rounded-full border border-gray-300 text-lg font-semibold"
-                aria-label={t('product.increaseQty')}
+                aria-label="Aumentar cantidad"
               >
                 +
               </button>
             </div>
           </div>
 
-          <div className="mt-3 flex items-center justify-between rounded-2xl bg-white p-4 shadow-sm">
-            <span className="text-gray-600">{t('product.estimatedTotal')}</span>
-            <span className="text-xl font-extrabold text-brand">{formatPrice(unitPrice * quantity)}</span>
+          <div className="mt-3 flex items-center justify-between rounded-xl border border-black/5 bg-white p-4">
+            <span className="text-gray-600">Total estimado</span>
+            <span className="text-xl font-bold text-brand">{formatPrice(unitPrice * quantity)}</span>
           </div>
 
           <button
             type="button"
             onClick={handleAdd}
-            className="mt-4 w-full rounded-xl bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
+            className="mt-4 w-full rounded-lg bg-accent py-3 font-semibold text-white transition-colors hover:bg-accent-dark"
           >
-            {t('product.addToCart')}
+            Añadir al carrito
           </button>
         </div>
       </div>

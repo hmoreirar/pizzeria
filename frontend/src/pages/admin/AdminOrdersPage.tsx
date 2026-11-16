@@ -13,26 +13,26 @@ export function AdminOrdersPage() {
   useEffect(() => {
     getAdminOrders()
       .then(setOrders)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-500">Loading…</p>
+  if (loading) return <p className="text-gray-500">Cargando…</p>
   if (error) return <p className="text-accent">{error}</p>
 
   return (
     <div>
-      <h1 className="mb-6 text-2xl font-extrabold text-gray-900">Orders</h1>
+      <h1 className="mb-6 text-2xl font-bold text-gray-900">Pedidos</h1>
 
       {orders.length === 0 ? (
-        <p className="text-gray-500">No orders yet.</p>
+        <p className="text-gray-500">Sin pedidos aún.</p>
       ) : (
         <div className="space-y-2">
           {orders.map((order) => (
             <Link
               key={order.id}
               to={`/admin/orders/${order.id}`}
-              className="flex flex-wrap items-center justify-between gap-2 rounded-xl bg-white px-4 py-3 shadow-sm hover:shadow"
+              className="flex flex-wrap items-center justify-between gap-2 rounded-lg border border-black/5 bg-white px-4 py-3 hover:border-black/10"
             >
               <div className="flex items-center gap-3">
                 <span className="font-bold text-gray-900">#{order.id}</span>

@@ -19,8 +19,10 @@ export async function ensureSeedData(): Promise<void> {
     )
   }
 
-  // Sincroniza opciones de tamaño: renombra grupo (español -> inglés) y deltas premium.
-  await pool.query(`UPDATE option_groups SET name = 'Size' WHERE name = 'Tamaño'`)
+  // Sincroniza opciones de tamaño: normaliza nombres a español y aplica deltas.
+  await pool.query(`UPDATE option_groups SET name = 'Tamaño' WHERE name = 'Size'`)
+  await pool.query(`UPDATE options SET name = 'Grande · 32 cm' WHERE name = 'Large · 32 cm'`)
+  await pool.query(`UPDATE options SET name = 'Familiar · 38 cm' WHERE name = 'Family · 38 cm'`)
   for (const o of sizeOptions) {
     await pool.query('UPDATE options SET price_delta = $2 WHERE name = $1', [
       o.name,
@@ -28,7 +30,7 @@ export async function ensureSeedData(): Promise<void> {
     ])
   }
 
-  // Pizzas (configurables): producto + grupo "Size" solo si aún no tiene grupos.
+  // Pizzas (configurables): producto + grupo "Tamaño" solo si aún no tiene grupos.
   for (const p of pizzas) {
     await pool.query(
       `INSERT INTO products (id, category_id, name, description, image, price, active)
@@ -49,7 +51,7 @@ export async function ensureSeedData(): Promise<void> {
     if (existing.rows.length === 0) {
       const group = await pool.query<{ id: number }>(
         `INSERT INTO option_groups (product_id, name, min_select, max_select, sort_order)
-         VALUES ($1, 'Size', 1, 1, 0)
+         VALUES ($1, 'Tamaño', 1, 1, 0)
          RETURNING id`,
         [p.id],
       )

@@ -20,7 +20,7 @@ export function AdminOrderDetailPage() {
     if (!Number.isInteger(orderId)) return
     getAdminOrder(orderId)
       .then(setOrder)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
   }, [id])
 
   useEffect(load, [load])
@@ -32,30 +32,30 @@ export function AdminOrderDetailPage() {
       const updated = await updateOrderStatus(order.id, status)
       setOrder(updated)
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Error updating')
+      setError(err instanceof Error ? err.message : 'Error al actualizar')
     }
   }
 
   if (error) return <p className="text-accent">{error}</p>
-  if (!order) return <p className="text-gray-500">Loading…</p>
+  if (!order) return <p className="text-gray-500">Cargando…</p>
 
   return (
     <div>
       <Link to="/admin/orders" className="mb-4 inline-block font-semibold text-brand">
-        ← Back to orders
+        ← Volver a pedidos
       </Link>
 
       <div className="flex flex-wrap items-center justify-between gap-2">
-        <h1 className="text-2xl font-extrabold text-gray-900">Order #{order.id}</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Pedido #{order.id}</h1>
         <span className={`rounded-full px-3 py-1 text-sm font-semibold ${STATUS_BADGE[order.status]}`}>
           {STATUS_LABELS[order.status]}
         </span>
       </div>
 
       {/* Status change */}
-      <div className="mt-4 rounded-2xl bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">
-          Change status
+      <div className="mt-4 rounded-xl border border-black/5 bg-white p-4">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+          Cambiar estado
         </h2>
         <div className="flex flex-wrap gap-2">
           {ORDER_STATUSES.map((status) => (
@@ -77,8 +77,10 @@ export function AdminOrderDetailPage() {
       </div>
 
       {/* Customer */}
-      <section className="mt-4 rounded-2xl bg-white p-4 text-sm shadow-sm">
-        <h2 className="mb-2 text-sm font-bold uppercase tracking-wide text-gray-500">Customer</h2>
+      <section className="mt-4 rounded-xl border border-black/5 bg-white p-4 text-sm">
+        <h2 className="mb-2 text-sm font-semibold uppercase tracking-wide text-gray-500">
+          Cliente
+        </h2>
         <p className="text-gray-900">
           {order.delivery.name} · {order.delivery.phone}
         </p>
@@ -90,14 +92,16 @@ export function AdminOrderDetailPage() {
           <p className="mt-1 text-gray-500">"{order.delivery.instructions}"</p>
         )}
         <p className="mt-2 text-gray-500">
-          Payment: {PAYMENT_LABELS[order.paymentMethod]} ·{' '}
-          {order.paymentStatus === 'paid' ? 'Paid' : 'Pending'}
+          Pago: {PAYMENT_LABELS[order.paymentMethod]} ·{' '}
+          {order.paymentStatus === 'paid' ? 'Pagado' : 'Pendiente'}
         </p>
       </section>
 
       {/* Items */}
-      <section className="mt-4 rounded-2xl bg-white p-4 shadow-sm">
-        <h2 className="mb-3 text-sm font-bold uppercase tracking-wide text-gray-500">Items</h2>
+      <section className="mt-4 rounded-xl border border-black/5 bg-white p-4">
+        <h2 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-500">
+          Artículos
+        </h2>
         <ul className="space-y-2 text-sm">
           {order.items.map((item, index) => (
             <li key={index} className="flex justify-between gap-2">
@@ -120,7 +124,7 @@ export function AdminOrderDetailPage() {
             <span>{formatPrice(order.subtotal)}</span>
           </div>
           <div className="mt-1 flex justify-between text-gray-600">
-            <span>Delivery</span>
+            <span>Despacho</span>
             <span>{formatPrice(order.deliveryFee)}</span>
           </div>
           <div className="mt-2 flex justify-between text-base font-bold text-gray-900">

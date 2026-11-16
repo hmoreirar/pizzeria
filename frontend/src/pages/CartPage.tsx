@@ -1,44 +1,42 @@
 import { Link } from 'react-router'
-import { useTranslation } from 'react-i18next'
 import { useCart } from '../cart/cart'
 import { Header } from '../components/Header'
 import { formatPrice } from '../lib/format'
 
 export function CartPage() {
   const { items, subtotal, setQuantity, removeItem } = useCart()
-  const { t } = useTranslation()
 
   return (
     <div className="min-h-screen pb-24 sm:pb-0">
       <Header />
 
       <main className="mx-auto max-w-2xl px-4 py-6">
-        <h1 className="mb-6 text-2xl font-extrabold text-gray-900">{t('cart.title')}</h1>
+        <h1 className="mb-6 text-2xl font-bold text-gray-900">Tu carrito</h1>
 
         {items.length === 0 ? (
           <div className="text-center">
-            <p className="text-gray-500">{t('cart.empty')}</p>
+            <p className="text-gray-500">Tu carrito está vacío.</p>
             <Link
               to="/"
-              className="mt-4 inline-block rounded-xl bg-brand px-6 py-3 font-semibold text-white"
+              className="mt-4 inline-block rounded-lg bg-brand px-6 py-3 font-semibold text-white"
             >
-              {t('common.viewMenu')}
+              Ver menú
             </Link>
           </div>
         ) : (
           <>
-            <ul className="space-y-4">
+            <ul className="space-y-3">
               {items.map((item) => (
-                <li key={item.key} className="flex gap-4 rounded-2xl bg-white p-4 shadow-sm">
+                <li key={item.key} className="flex gap-4 rounded-xl border border-black/5 bg-white p-4">
                   {item.image ? (
                     <img
                       src={item.image}
                       alt={item.name}
-                      className="h-20 w-20 shrink-0 rounded-xl object-cover"
+                      className="h-20 w-20 shrink-0 rounded-lg object-cover"
                     />
                   ) : (
-                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-xl bg-cream text-xl">
-                      {t('common.imageFallback')}
+                    <div className="flex h-20 w-20 shrink-0 items-center justify-center rounded-lg bg-cream text-sm text-gray-400">
+                      Pizza
                     </div>
                   )}
 
@@ -58,7 +56,7 @@ export function CartPage() {
                         type="button"
                         onClick={() => removeItem(item.key)}
                         className="text-gray-400 transition-colors hover:text-accent"
-                        aria-label={t('cart.remove', { name: item.name })}
+                        aria-label={`Quitar ${item.name}`}
                       >
                         ✕
                       </button>
@@ -70,7 +68,7 @@ export function CartPage() {
                           type="button"
                           onClick={() => setQuantity(item.key, item.quantity - 1)}
                           className="h-8 w-8 rounded-full border border-gray-300 font-semibold"
-                          aria-label={t('cart.decreaseQty')}
+                          aria-label="Disminuir cantidad"
                         >
                           −
                         </button>
@@ -79,7 +77,7 @@ export function CartPage() {
                           type="button"
                           onClick={() => setQuantity(item.key, item.quantity + 1)}
                           className="h-8 w-8 rounded-full border border-gray-300 font-semibold"
-                          aria-label={t('cart.increaseQty')}
+                          aria-label="Aumentar cantidad"
                         >
                           +
                         </button>
@@ -89,26 +87,28 @@ export function CartPage() {
                       </span>
                     </div>
                     <p className="mt-1 text-right text-xs text-gray-400">
-                      {t('cart.each', { price: formatPrice(item.unitPrice) })}
+                      {formatPrice(item.unitPrice)} c/u
                     </p>
                   </div>
                 </li>
               ))}
             </ul>
 
-            <div className="mt-6 rounded-2xl bg-white p-4 shadow-sm">
+            <div className="mt-6 rounded-xl border border-black/5 bg-white p-4">
               <div className="flex items-center justify-between text-gray-600">
-                <span>{t('cart.subtotal')}</span>
+                <span>Subtotal</span>
                 <span className="text-lg font-bold text-gray-900">{formatPrice(subtotal)}</span>
               </div>
-              <p className="mt-1 text-sm text-gray-400">{t('cart.deliveryNote')}</p>
+              <p className="mt-1 text-sm text-gray-400">
+                El despacho se agrega al finalizar la compra.
+              </p>
             </div>
 
             <Link
               to="/checkout"
-              className="mt-4 block w-full rounded-xl bg-accent py-3 text-center font-semibold text-white transition-colors hover:bg-accent-dark"
+              className="mt-4 block w-full rounded-lg bg-accent py-3 text-center font-semibold text-white transition-colors hover:bg-accent-dark"
             >
-              {t('cart.continueCheckout')}
+              Continuar al pago
             </Link>
           </>
         )}

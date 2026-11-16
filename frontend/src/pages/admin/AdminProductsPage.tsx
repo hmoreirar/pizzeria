@@ -12,39 +12,39 @@ export function AdminProductsPage() {
   useEffect(() => {
     getAdminProducts()
       .then(setProducts)
-      .catch((err) => setError(err instanceof Error ? err.message : 'Error loading'))
+      .catch((err) => setError(err instanceof Error ? err.message : 'Error al cargar'))
       .finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <p className="text-gray-500">Loading…</p>
+  if (loading) return <p className="text-gray-500">Cargando…</p>
   if (error) return <p className="text-accent">{error}</p>
 
   return (
     <div>
       <div className="mb-6 flex items-center justify-between">
-        <h1 className="text-2xl font-extrabold text-gray-900">Products</h1>
+        <h1 className="text-2xl font-bold text-gray-900">Productos</h1>
         <Link
           to="/admin/products/new"
-          className="rounded-xl bg-brand px-4 py-2 font-semibold text-white"
+          className="rounded-lg bg-brand px-4 py-2 font-semibold text-white"
         >
-          + New product
+          + Nuevo producto
         </Link>
       </div>
 
       {products.length === 0 ? (
-        <p className="text-gray-500">No products.</p>
+        <p className="text-gray-500">Sin productos.</p>
       ) : (
         <div className="space-y-2">
           {products.map((product) => (
             <div
               key={product.id}
-              className="flex items-center justify-between gap-2 rounded-xl bg-white px-4 py-3 shadow-sm"
+              className="flex items-center justify-between gap-2 rounded-lg border border-black/5 bg-white px-4 py-3"
             >
               <div className="flex items-center gap-3">
                 {product.image ? (
                   <img src={product.image} alt="" className="h-10 w-10 rounded-lg object-cover" />
                 ) : (
-                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cream text-xs">
+                  <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-cream text-xs text-gray-400">
                     Pizza
                   </div>
                 )}
@@ -60,13 +60,13 @@ export function AdminProductsPage() {
                     product.active ? 'bg-leaf/15 text-leaf' : 'bg-gray-100 text-gray-500'
                   }`}
                 >
-                  {product.active ? 'Active' : 'Inactive'}
+                  {product.active ? 'Activo' : 'Inactivo'}
                 </span>
                 <Link
                   to={`/admin/products/${product.id}`}
                   className="rounded-lg border border-gray-300 px-3 py-1.5 text-sm font-semibold text-gray-700 hover:bg-gray-50"
                 >
-                  Edit
+                  Editar
                 </Link>
               </div>
             </div>

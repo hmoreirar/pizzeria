@@ -17,7 +17,7 @@ import { formatPrice } from '../../lib/format'
 import type { AdminOptionGroup, Category, Product } from '../../types'
 
 const inputClass =
-  'mt-1 w-full rounded-xl border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-brand focus:outline-none'
+  'mt-1 w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-gray-900 focus:border-brand focus:outline-none'
 
 export function AdminProductEditPage() {
   const { id } = useParams()
@@ -42,7 +42,7 @@ export function AdminProductEditPage() {
     if (productId) {
       getOptionGroups(productId)
         .then(setGroups)
-        .catch(() => setError('Could not load options.'))
+        .catch(() => setError('No se pudieron cargar las opciones.'))
     }
   }, [productId])
 
@@ -54,7 +54,7 @@ export function AdminProductEditPage() {
           setCategoryId((prev) => (prev === 0 && cats.length > 0 ? cats[0].id : prev))
         }
       })
-      .catch(() => setError('Could not load categories.'))
+      .catch(() => setError('No se pudieron cargar las categorías.'))
 
     if (!isNew && productId) {
       getAdminProduct(productId)
@@ -66,7 +66,7 @@ export function AdminProductEditPage() {
           setPrice(String(p.price))
           setActive(p.active)
         })
-        .catch(() => setError('Could not load the product.'))
+        .catch(() => setError('No se pudo cargar el producto.'))
         .finally(() => setLoading(false))
       loadGroups()
     } else {
@@ -96,30 +96,30 @@ export function AdminProductEditPage() {
         setError(null)
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Could not save.')
+      setError(err instanceof Error ? err.message : 'No se pudo guardar.')
       setSaving(false)
     }
   }
 
-  if (loading) return <p className="text-gray-500">Loading…</p>
+  if (loading) return <p className="text-gray-500">Cargando…</p>
 
   return (
     <div>
       <Link to="/admin/products" className="mb-4 inline-block font-semibold text-brand">
-        ← Back to products
+        ← Volver a productos
       </Link>
-      <h1 className="mb-6 text-2xl font-extrabold text-gray-900">
-        {isNew ? 'New product' : `Edit: ${name || '…'}`}
+      <h1 className="mb-6 text-2xl font-bold text-gray-900">
+        {isNew ? 'Nuevo producto' : `Editar: ${name || '…'}`}
       </h1>
 
-      <form onSubmit={handleSave} className="rounded-2xl bg-white p-5 shadow-sm">
+      <form onSubmit={handleSave} className="rounded-xl border border-black/5 bg-white p-5">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Name</label>
+            <label className="text-sm font-medium text-gray-700">Nombre</label>
             <input className={inputClass} value={name} onChange={(e) => setName(e.target.value)} required />
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Category</label>
+            <label className="text-sm font-medium text-gray-700">Categoría</label>
             <select
               className={inputClass}
               value={categoryId}
@@ -134,7 +134,7 @@ export function AdminProductEditPage() {
             </select>
           </div>
           <div>
-            <label className="text-sm font-medium text-gray-700">Price (CLP)</label>
+            <label className="text-sm font-medium text-gray-700">Precio (CLP)</label>
             <input
               type="number"
               min={0}
@@ -146,7 +146,7 @@ export function AdminProductEditPage() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Description</label>
+            <label className="text-sm font-medium text-gray-700">Descripción</label>
             <textarea
               className={inputClass}
               rows={2}
@@ -155,12 +155,12 @@ export function AdminProductEditPage() {
             />
           </div>
           <div className="sm:col-span-2">
-            <label className="text-sm font-medium text-gray-700">Image URL</label>
+            <label className="text-sm font-medium text-gray-700">URL de imagen</label>
             <input
               className={inputClass}
               value={image}
               onChange={(e) => setImage(e.target.value)}
-              placeholder="/images/… or https://…"
+              placeholder="/images/… o https://…"
             />
           </div>
           <label className="flex items-center gap-2 text-sm font-medium text-gray-700">
@@ -170,18 +170,20 @@ export function AdminProductEditPage() {
               onChange={(e) => setActive(e.target.checked)}
               className="accent-brand"
             />
-            Active (visible to customers)
+            Activo (visible para clientes)
           </label>
         </div>
 
-        {error && <p className="mt-4 rounded-xl bg-accent/10 px-4 py-2 text-sm text-accent">{error}</p>}
+        {error && (
+          <p className="mt-4 rounded-lg bg-accent/10 px-4 py-2 text-sm text-accent">{error}</p>
+        )}
 
         <button
           type="submit"
           disabled={saving}
-          className="mt-5 rounded-xl bg-brand px-6 py-2.5 font-semibold text-white disabled:opacity-60"
+          className="mt-5 rounded-lg bg-brand px-6 py-2.5 font-semibold text-white disabled:opacity-60"
         >
-          {saving ? 'Saving…' : 'Save product'}
+          {saving ? 'Guardando…' : 'Guardar producto'}
         </button>
       </form>
 
@@ -229,16 +231,16 @@ function OptionsManager({
 
   return (
     <section className="mt-6">
-      <h2 className="mb-3 text-lg font-bold text-gray-900">Configuration options</h2>
+      <h2 className="mb-3 text-lg font-semibold text-gray-900">Opciones de configuración</h2>
 
       {groups.map((group) => (
-        <div key={group.id} className="mb-4 rounded-2xl bg-white p-4 shadow-sm">
+        <div key={group.id} className="mb-4 rounded-xl border border-black/5 bg-white p-4">
           <div className="flex items-center justify-between gap-2">
             <div>
               <p className="font-semibold text-gray-900">{group.name}</p>
               <p className="text-xs text-gray-500">
-                {group.minSelect}–{group.maxSelect} selection ·{' '}
-                {group.active ? 'Active' : 'Inactive'}
+                {group.minSelect}–{group.maxSelect} selección ·{' '}
+                {group.active ? 'Activo' : 'Inactivo'}
               </p>
             </div>
             <div className="flex items-center gap-2">
@@ -247,14 +249,14 @@ function OptionsManager({
                 onClick={() => toggleGroup(group)}
                 className="rounded-lg border border-gray-300 px-2 py-1 text-xs font-semibold text-gray-600"
               >
-                {group.active ? 'Deactivate' : 'Activate'}
+                {group.active ? 'Desactivar' : 'Activar'}
               </button>
               <button
                 type="button"
                 onClick={() => deleteOptionGroup(group.id).then(onChanged)}
                 className="rounded-lg border border-gray-300 px-2 py-1 text-xs font-semibold text-accent"
               >
-                Delete group
+                Eliminar grupo
               </button>
             </div>
           </div>
@@ -281,14 +283,14 @@ function OptionsManager({
                     }
                     className="rounded-lg border border-gray-300 px-2 py-1 text-xs font-semibold text-gray-600"
                   >
-                    {option.active ? 'Deactivate' : 'Activate'}
+                    {option.active ? 'Desactivar' : 'Activar'}
                   </button>
                   <button
                     type="button"
                     onClick={() => deleteOption(option.id).then(onChanged)}
                     className="text-xs font-semibold text-accent"
                   >
-                    Delete
+                    Eliminar
                   </button>
                 </div>
               </li>
@@ -302,16 +304,16 @@ function OptionsManager({
       <div className="flex gap-2">
         <input
           className={inputClass}
-          placeholder="Group name (e.g. Crust)"
+          placeholder="Nombre del grupo (ej. Masa)"
           value={newGroupName}
           onChange={(e) => setNewGroupName(e.target.value)}
         />
         <button
           type="button"
           onClick={addGroup}
-          className="shrink-0 rounded-xl bg-brand px-4 py-2 font-semibold text-white"
+          className="shrink-0 rounded-lg bg-brand px-4 py-2 font-semibold text-white"
         >
-          + Add group
+          + Agregar grupo
         </button>
       </div>
     </section>
@@ -347,7 +349,7 @@ function AddOption({
     <div className="mt-3 flex gap-2">
       <input
         className={inputClass}
-        placeholder="New option (e.g. Extra cheese)"
+        placeholder="Nueva opción (ej. Queso extra)"
         value={name}
         onChange={(e) => setName(e.target.value)}
       />
@@ -355,16 +357,16 @@ function AddOption({
         type="number"
         min={0}
         step={1}
-        className="mt-1 w-24 rounded-xl border border-gray-300 px-2 py-2"
+        className="mt-1 w-24 rounded-lg border border-gray-300 px-2 py-2"
         value={priceDelta}
         onChange={(e) => setPriceDelta(e.target.value)}
       />
       <button
         type="button"
         onClick={add}
-        className="mt-1 shrink-0 rounded-xl border border-brand px-3 font-semibold text-brand"
+        className="mt-1 shrink-0 rounded-lg border border-brand px-3 font-semibold text-brand"
       >
-        + Add
+        + Agregar
       </button>
     </div>
   )

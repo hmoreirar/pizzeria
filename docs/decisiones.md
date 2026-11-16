@@ -85,3 +85,14 @@ Se completa fase a fase.
 | Rutas admin bajo `/api/admin` con `requireAdmin` | Prefijos sueltos | Protección central y auditable |
 | Admin inicial vía seed (credenciales de `env`) | Usuario en migración | Configurable y reseteable con `npm run seed` |
 | Opciones administrables: agregar/eliminar/activar | Editor completo inline de cada campo | MVP: cubre la operación diaria sin sobre-ingeniería |
+
+## Fase 6 — Interfaz monolingüe
+
+- Se eliminó `i18next` y el selector español/inglés. La tienda, el panel admin
+  y el catálogo placeholder quedan solo en español.
+- Razón: el público objetivo es local; el sistema de traducciones agregaba
+  dependencias, claves duplicadas y carga de mantenimiento sin uso real.
+- Textos de interfaz hardcodeados en español; `Intl` fijo en `es-CL`.
+- Catálogo traducido en `catalog.ts` y en la migración `009_spanish-catalog`.
+- Hero rediseñado en formato split (texto + foto contenida) para bajar altura
+  y peso visual, alineado con una estética minimalista.
