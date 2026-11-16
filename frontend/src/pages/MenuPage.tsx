@@ -55,7 +55,7 @@ function Hero() {
 function CategoryNav({ categories }: { categories: Category[] }) {
   return (
     <nav className="sticky top-[52px] z-20 border-b border-black/5 bg-cream/95 backdrop-blur">
-      <div className="mx-auto flex max-w-5xl gap-2 overflow-x-auto px-4 py-3">
+      <div className="mx-auto flex max-w-5xl flex-wrap gap-2 px-4 py-3">
         {categories.map((c) => (
           <a
             key={c.id}
@@ -131,7 +131,7 @@ export function MenuPage() {
             const tagline = TAGLINES[category.id]
 
             return (
-              <section key={category.id} id={`cat-${category.id}`} className="mb-12 scroll-mt-28">
+              <section key={category.id} id={`cat-${category.id}`} className="mb-12 scroll-mt-40 sm:scroll-mt-28">
                 <div className="mb-6">
                   <h3 className="text-xl font-bold text-gray-900">{category.name}</h3>
                   {tagline && <p className="mt-1 text-sm text-gray-500">{tagline}</p>}
